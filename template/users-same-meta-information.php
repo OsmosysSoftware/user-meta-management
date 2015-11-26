@@ -28,9 +28,6 @@ require_once( __DIR__ . '/../config.php');
                 }
             } else {
                 ?>
-                <tr>
-                    <td colspan="4">There are no users for the given meta key and value combination.</td>
-                </tr>
             <?php } ?>
         </tbody>
     </table>

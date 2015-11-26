@@ -161,3 +161,7 @@
 .message-container{
     margin-top: 200px;
 }
+
+.notifyjs-bootstrap-error {
+    margin-top:30px !important;
+}

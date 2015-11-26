@@ -1,4 +1,4 @@
-jQuery(document).ready(function ($) {
+var userMetaManager=(function(){
     var metaInformation = [];
     var userId;
     $('#usersMeta').dataTable({
@@ -7,13 +7,11 @@ jQuery(document).ready(function ($) {
         'scrollX': true,
         "autoWidth": false
     });
-
-
+    
     $('#submitMeta').click(function (e) {
         e.preventDefault();
         if ($('#txtMetaKey').val() !== '') {
             getMetaMatchLIst();
-
         } else {
             $('#txtMetaKey').addClass('error');
         }
@@ -62,7 +60,7 @@ jQuery(document).ready(function ($) {
     });
 
     function showMessage(data){
-	    var json=JSON.parse(data);
+	var json=JSON.parse(data);
 	jQuery('#myModal').modal('hide');
 	console.log(json.error);
 	if(json['error']){
@@ -126,7 +124,7 @@ jQuery(document).ready(function ($) {
 //            "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
 //            'scrollY': true,
 //            "autoWidth": false
-"autoWidth": false,
+            "autoWidth": false,
             "scrollY": "400px",
             "scrollCollapse": true,
             "paging": false
@@ -142,14 +140,17 @@ jQuery(document).ready(function ($) {
     // Function to show the meta information of the user.
     function showmetaLIst(result) {     	    
         jQuery('#usersMeta').DataTable().destroy();
+        jQuery('#userMeta').DataTable().clear().draw();
         jQuery('.user-meta-information').remove();
         jQuery('.meta-results').html('');
         jQuery('.meta-table-results').html(result);
         jQuery('.user-meta-information').show();
        $('#usersMeta').dataTable({
 	"dom": '<"top">rt<"bottom" pl>',
-	"order": [[ 0, "asc" ]], '\
-	 scrollX': true,
+	"language": {
+                    "emptyTable": "There are no users with the specificied meta combination."
+                },
+	 'scrollX': true,
 	"autoWidth": false
 	});
         
@@ -187,6 +188,7 @@ jQuery(document).ready(function ($) {
             },
             error: function (xhr) {
                 console.log(xhr);
+	jQuery.notify('Unable to process your request', "error");	
             }
         });
     }
@@ -211,3 +213,4 @@ jQuery(document).ready(function ($) {
         jQuery('#userMetaInformation').append(appendContent);
     }
 });
+jQuery(userMetaManager);
