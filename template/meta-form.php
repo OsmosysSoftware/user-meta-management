@@ -16,7 +16,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <button type="button" id="addUserMetaInformation"   class="btn btn-primary">Add Meta Key</button>
+                
                 <h4 class="modal-title" id="myModalLabel">User meta information</h4>
             </div>
             <div class="modal-body" id="userMetaDetails">
@@ -24,7 +29,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="updateUserMetaInformation"  class="btn btn-primary btn-space">Update</button>
-                <button type="button" id="addUserMetaInformation"   class="btn btn-primary btn-space">Add</button>
                 <button type="button" id="deleteUserMetaInformation" class="btn btn-primary btn-space">Delete</button>
             </div>
         </div>

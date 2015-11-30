@@ -7,7 +7,7 @@ var userMetaManager=(function(){
         'scrollX': true,
         "autoWidth": false
     });
-    
+
     $('#submitMeta').click(function (e) {
         e.preventDefault();
         if ($('#txtMetaKey').val() !== '') {
@@ -27,13 +27,13 @@ var userMetaManager=(function(){
     $('body').on('click', '#imgClose', function () {
         jQuery('.user-meta-information').hide();
     });
-    
+
     $('body').on('click', '#updateUserMetaInformation', function () {
         var updateMetaInformation = [];
         var updatedMetaData = {};
         for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[0]).val();
-            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+          var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
+          var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
             updateMetaInformation[key] = value;
         }
         for (var key in updateMetaInformation) {
@@ -66,7 +66,7 @@ var userMetaManager=(function(){
 	if(json['error']){
 	    var container= jQuery('#modalnfo').find('.modal-body');
 	    jQuery(container).html(json['error']);
-	    jQuery('#modalnfo').modal('show');    
+	    jQuery('#modalnfo').modal('show');
 	}
 	else{
 	var container= jQuery('#modalSuccess').find('.modal-body');
@@ -86,30 +86,22 @@ var userMetaManager=(function(){
 
     // Function to delete the User meta information from the meta list available..
     function deleteUserMetaInformation() {
-        if (jQuery('#deleteUserMetaInformation').hasClass('delete-meta')) {
-            jQuery('#deleteUserMetaInformation').removeClass('delete-meta');
             var deleteMetaInformation = {};
             for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
                 var check = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input:checked'));
                 if (check.length) {
-                    var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[0]).val();
-                    var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+                    var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+                    var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[2]).val();
                     deleteMetaInformation[key] = value;
-                }
             }
+    }
             var data = {
                 'action': 'delete_user_meta',
                 'userId': userId,
                 'userMetaData': deleteMetaInformation
             };
             ajaxCall(data, showMessage);
-        } else {
-            jQuery('#deleteUserMetaInformation').addClass('delete-meta');
-            for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-                jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('td')[2]).remove();
-            }
-            appendCheckBoxes();
-        }
+
     }
 
 // Function to shoe the user meta details.
@@ -121,24 +113,30 @@ var userMetaManager=(function(){
         jQuery('.user-meta-information').show();
         jQuery('#userMetaInformation').dataTable({
             "dom": '<"top">rt<"bottom">',
+	    "columnDefs": [
+    { "width": "180px", "targets": 1 }
+  ],
 //            "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
 //            'scrollY': true,
 //            "autoWidth": false
             "autoWidth": false,
+            "paging":  false,
             "scrollY": "400px",
-            "scrollCollapse": true,
-            "paging": false
-        });
+            "scrollCollapse": false,
+	sortable:false,
+	"bSort" : false
+} );
+
 
         for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[0]).val();
-            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[2]).val();
             metaInformation[key] = value;
         }
     }
-    
+
     // Function to show the meta information of the user.
-    function showmetaLIst(result) {     	    
+    function showmetaLIst(result) {
         jQuery('#usersMeta').DataTable().destroy();
         jQuery('#userMeta').DataTable().clear().draw();
         jQuery('.user-meta-information').remove();
@@ -153,7 +151,7 @@ var userMetaManager=(function(){
 	 'scrollX': true,
 	"autoWidth": false
 	});
-        
+
 //        jQuery('#userMetaInformation').DataTable({
 //            "dom": '<"top">rt<"bottom" pl>',
 //            'scrollX': true,
@@ -188,29 +186,21 @@ var userMetaManager=(function(){
             },
             error: function (xhr) {
                 console.log(xhr);
-	jQuery.notify('Unable to process your request', "error");	
+	jQuery.notify('Unable to process your request', "error");
             }
         });
     }
 
-// Function to append the check boxes.
-    function appendCheckBoxes() {
-        var checkboxContent = '<td><input  type="checkbox" name="meta[]"></td>';
-        for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-            jQuery(jQuery(jQuery('#userMetaInformation tr')[i])).append(checkboxContent);
-        }
-    }
+
 // Function to append the new meta key and value to the existing meta information.
     function addMetaKeyValue() {
-        for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-            var check = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[name="meta[]"]'));
-            if (check.length) {
-               jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('td')[2]).hide();
-            }
-        } jQuery('#deleteUserMetaInformation').removeClass('delete-meta');
-        var appendContent = '<tr><td><input type="text" placeholder="  Meta key....."></td>';
+        var appendContent = '<tr id="div-16"><td><input  type="checkbox" name="meta[]"></td>';
+        appendContent += '<td><input type="text" placeholder="  Meta key....."></td>';
         appendContent += '<td><input type="text" placeholder=" Meta value...." </td></tr>';
         jQuery('#userMetaInformation').append(appendContent);
+       jQuery('html, .dataTables_scrollBody').animate({ scrollTop: jQuery('#userMetaInformation tr:last').offset().top }, 500);
+      jQuery('#updateUserMetaInformation').html('Save');
+
     }
 });
 jQuery(userMetaManager);

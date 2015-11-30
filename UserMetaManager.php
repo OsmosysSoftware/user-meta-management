@@ -2,12 +2,12 @@
 
 /* *
  * Plugin Name: User Meta Manager
- * Plugin URI:
+ * Plugin URI: http://osmosyssoftware.github.io/user-meta-manager/
  * Description: This plugin is used to manage  the users meta information.
- * Version: 1.0.0
+ * Version: 0.1.0
  * Author: Osmosys-Siddhartha
  * Author URI: http://osmosys.asia
- * License: GPL2
+ * License: GPLv2
  */
 require_once( __DIR__ . '/config.php');
 
@@ -26,7 +26,8 @@ class UserMetaManager {
         add_action('wp_ajax_nopriv_get_user_meta_details', array($this, 'getUserMetaDetails')); // Action to get the user meta details.
         add_action('wp_ajax_nopriv_update_user_meta_data', array($this, 'updateUserMetaDetails')); //  Action to update the user meta details.
         add_action('wp_ajax_nopriv_delete_user_meta', array($this, 'deleteUserMetaDetails'));  // Action to delete the user meta details.
-        add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard
+        add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__),array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
     }
 
     // Function to register all the styles.
@@ -44,7 +45,7 @@ class UserMetaManager {
         wp_register_script("user-meta-script", USER_META_PLUGIN_URL . '/js/script.js', array('jquery'));
         wp_register_script("user-meta-notify", USER_META_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
     }
-    
+
     // Function to enqueue all the registered scripts and styles.
     function enquerer() {
         wp_enqueue_style('user-meta-bootstrap-css');
@@ -156,8 +157,8 @@ class UserMetaManager {
         die();
     }
 
-    /*  Function to update the user meta details. 
-     * 1) This function receives the userId and meta information  to be updated from the client side through ajax call..
+    /*  . 
+     * 1) It  receives the userId and meta information to be updated from the client side through ajax call..
      * 2) The meta information to be updated consists of array of meta keys and values.
      * 3) First the list of keys are passed into the variable. 
      * 4) Then by passing the userid, meta key and meta value to the  update_user_meta function of wordpress 
@@ -213,6 +214,13 @@ class UserMetaManager {
         $this->enquerer();
         echo($this->showMetaForm());
         echo($this->showAllUsersOfSpecificMetaKey(null, null));
+    }
+
+    public  function addActionLink( $links ) {
+        $mylinks = array(
+            '<a href="' . admin_url('users.php?page=user-meta-manager') . '">Settings</a>',
+        );
+        return array_merge($links, $mylinks);
     }
 
 }

@@ -70,8 +70,11 @@
 #userMetaInformation{
     width:100%;
 }
-#userMetaInformation th{
-    width:260px !important;
+#userMetaInformation th:first-child{
+    width:60px !important;
+}
+#userMetaInformation th.sorting{
+    width:55px !important;
 }
 .dataTables_scrollHeadInner,.dataTable {
     width:100% !important;
@@ -164,4 +167,12 @@
 
 .notifyjs-bootstrap-error {
     margin-top:30px !important;
+}
+#addUserMetaInformation {
+    float: right;
+    margin-right: 30px;
+    margin-top: -4px;
+}
+.modal-header .close {
+    margin-top: 3px;
 }
