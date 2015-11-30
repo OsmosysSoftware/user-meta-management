@@ -1,4 +1,4 @@
-# user-meta-manager 
+# user-meta-management
 
 Contributors: Siddhartha-Osmosys
 
