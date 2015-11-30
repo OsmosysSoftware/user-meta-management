@@ -12,7 +12,7 @@ Stable tag: 4.3
 
 License: GPLv2 or later
 
-License URI: http://osmosyssoftware.github.io/user-meta-manager/
+License URI: http://osmosyssoftware.github.io/user-meta-management/
 
 
 ##### A WordPress plugin that allows you to view the meta keys associated with a given user.
