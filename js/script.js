@@ -7,7 +7,7 @@ var userMetaManager=(function(){
         'scrollX': true,
         "autoWidth": false
     });
-
+    
     $('#submitMeta').click(function (e) {
         e.preventDefault();
         if ($('#txtMetaKey').val() !== '') {
@@ -27,13 +27,13 @@ var userMetaManager=(function(){
     $('body').on('click', '#imgClose', function () {
         jQuery('.user-meta-information').hide();
     });
-
+    
     $('body').on('click', '#updateUserMetaInformation', function () {
         var updateMetaInformation = [];
         var updatedMetaData = {};
         for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-          var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
-          var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
+            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
+            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
             updateMetaInformation[key] = value;
         }
         for (var key in updateMetaInformation) {
@@ -54,7 +54,7 @@ var userMetaManager=(function(){
     $('body').on('click', '#addUserMetaInformation', function () {
         addMetaKeyValue();
     });
-
+    
     $('body').on('click', '#deleteUserMetaInformation', function () {
         deleteUserMetaInformation();
     });
@@ -66,7 +66,7 @@ var userMetaManager=(function(){
 	if(json['error']){
 	    var container= jQuery('#modalnfo').find('.modal-body');
 	    jQuery(container).html(json['error']);
-	    jQuery('#modalnfo').modal('show');
+	    jQuery('#modalnfo').modal('show');    
 	}
 	else{
 	var container= jQuery('#modalSuccess').find('.modal-body');
@@ -101,7 +101,7 @@ var userMetaManager=(function(){
                 'userMetaData': deleteMetaInformation
             };
             ajaxCall(data, showMessage);
-
+        
     }
 
 // Function to shoe the user meta details.
@@ -126,17 +126,17 @@ var userMetaManager=(function(){
 	sortable:false,
 	"bSort" : false
 } );
-
+       
 
         for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
-            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[2]).val();
+            var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
+            var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
             metaInformation[key] = value;
         }
     }
-
+    
     // Function to show the meta information of the user.
-    function showmetaLIst(result) {
+    function showmetaLIst(result) {     	    
         jQuery('#usersMeta').DataTable().destroy();
         jQuery('#userMeta').DataTable().clear().draw();
         jQuery('.user-meta-information').remove();
@@ -151,7 +151,7 @@ var userMetaManager=(function(){
 	 'scrollX': true,
 	"autoWidth": false
 	});
-
+        
 //        jQuery('#userMetaInformation').DataTable({
 //            "dom": '<"top">rt<"bottom" pl>',
 //            'scrollX': true,
@@ -186,7 +186,7 @@ var userMetaManager=(function(){
             },
             error: function (xhr) {
                 console.log(xhr);
-	jQuery.notify('Unable to process your request', "error");
+	jQuery.notify('Unable to process your request', "error");	
             }
         });
     }
@@ -200,7 +200,7 @@ var userMetaManager=(function(){
         jQuery('#userMetaInformation').append(appendContent);
        jQuery('html, .dataTables_scrollBody').animate({ scrollTop: jQuery('#userMetaInformation tr:last').offset().top }, 500);
       jQuery('#updateUserMetaInformation').html('Save');
-
+       
     }
 });
 jQuery(userMetaManager);

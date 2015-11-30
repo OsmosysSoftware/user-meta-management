@@ -1,8 +1,8 @@
 <?php
 
 /* *
- * Plugin Name: User Meta Manager
- * Plugin URI: http://osmosyssoftware.github.io/user-meta-manager/
+ * Plugin Name: User Meta Management
+ * Plugin URI: http://osmosyssoftware.github.io/user-meta-management/
  * Description: This plugin is used to manage  the users meta information.
  * Version: 0.1.0
  * Author: Osmosys-Siddhartha
@@ -11,7 +11,7 @@
  */
 require_once( __DIR__ . '/config.php');
 
-class UserMetaManager {
+class UserMetaManagement {
 
     public function __construct() {
         $this->styleRegisterer();
@@ -207,10 +207,10 @@ class UserMetaManager {
 
     // Function to create a user page in the user secion in the user seciton.
     public function addUserPage() {
-        add_users_page('User Meta Manager', 'User Meta Manager', 'edit_dashboard', 'user-meta-manager', array($this, 'userMetaManager'));
+        add_users_page('User Meta Management', 'User Meta Management', 'edit_dashboard', 'user-meta-management', array($this, 'userMetaManagement'));
     }
 
-    public function userMetaManager() {
+    public function userMetaManagement() {
         $this->enquerer();
         echo($this->showMetaForm());
         echo($this->showAllUsersOfSpecificMetaKey(null, null));
@@ -218,11 +218,11 @@ class UserMetaManager {
 
     public  function addActionLink( $links ) {
         $mylinks = array(
-            '<a href="' . admin_url('users.php?page=user-meta-manager') . '">Settings</a>',
+            '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
         );
         return array_merge($links, $mylinks);
     }
 
 }
 
-$meta = new UserMetaManager();
+$meta = new UserMetaManagement();
