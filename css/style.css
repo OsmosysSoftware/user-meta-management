@@ -1,0 +1,178 @@
+
+.error{
+    border: 1px solid #ff0000 !important;
+}
+#userMetaForm label{
+    display: inline-block;
+    width:95px;
+}
+#userMetaForm input{
+    margin-right:10px;
+}
+#userMetaForm{
+    margin:10px;
+    text-align: center;
+/*    margin:10px !important;    */
+}
+.dataTable th{
+    text-align: center;
+}
+.dataTable td{
+    text-align: center;
+}
+.meta-results{
+    width:100%;
+    height:auto;
+    margin:auto;
+   
+}
+/*.user-meta-results{
+    position:fixed;
+    width:500px;
+    top:40px;
+    right:40px;
+    text-align: center;
+}*/
+.paginate_button {
+    margin:5px;
+    cursor:pointer;
+}
+.btn-space{
+    margin-top:10px;
+    text-align: center;
+}
+.dataTables_length, .paging_simple_numbers{
+    display: inline-block;
+    float: right;
+    margin-top: 15px !important;;
+}
+.dataTables_length{
+    margin-right:10px;
+}
+#imgClose{
+    width:20px;
+    height:20px;
+    float:right;
+    margin-right:10px;
+    margin-top: 6px;
+}
+.meta-heading{
+    display:inline;
+    float:left;
+    font-weight:bold;
+    font-size: 1.5em;
+    margin-top:0px;
+    margin-left: 60px;  
+}
+.user-mail{
+    cursor:pointer;
+}
+#userMetaInformation{
+    width:100%;
+}
+#userMetaInformation th:first-child{
+    width:60px !important;
+}
+#userMetaInformation th.sorting{
+    width:55px !important;
+}
+.dataTables_scrollHeadInner,.dataTable {
+    width:100% !important;
+}
+.modal-content {
+    -webkit-border-radius: 0;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 0;
+    -moz-background-clip: padding;
+    border-radius: 6px;
+    background-clip: padding-box;
+    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 40px rgba(0,0,0,.5);
+    box-shadow: 0 0 40px rgba(0,0,0,.5);
+    color: #000;
+    background-color: #fff;
+    border: rgba(0,0,0,0);
+}
+.modal-message .modal-dialog {
+    width: 300px;
+}
+.modal-message .modal-body, .modal-message .modal-footer, .modal-message .modal-header, .modal-message .modal-title {
+    background: 0 0;
+    border: none;
+    margin: 0;
+    padding: 0 20px;
+    text-align: center!important;
+}
+
+.modal-message .modal-title {
+    font-size: 17px;
+    color: #737373;
+    margin-bottom: 3px;
+}
+
+.modal-message .modal-body {
+    color: #737373;
+}
+
+.modal-message .modal-header {
+    color: #fff;
+    margin-bottom: 10px;
+    padding: 15px 0 8px;
+}
+.modal-message .modal-header .fa, 
+.modal-message .modal-header 
+.glyphicon, .modal-message 
+.modal-header .typcn, .modal-message .modal-header .wi {
+    font-size: 30px;
+}
+
+.modal-message .modal-footer {
+    margin: 25px 0 20px;
+    padding-bottom: 10px;
+}
+
+.modal-backdrop.in {
+    zoom: 1;
+    filter: alpha(opacity=75);
+    -webkit-opacity: .75;
+    -moz-opacity: .75;
+    opacity: .75;
+}
+.modal-backdrop {
+    background-color: #fff;
+}
+.modal-message.modal-success .modal-header {
+    color: #53a93f;
+    border-bottom: 3px solid #a0d468;
+}
+
+.modal-message.modal-info .modal-header {
+    color: #57b5e3;
+    border-bottom: 3px solid #57b5e3;
+}
+
+.modal-message.modal-danger .modal-header {
+    color: #d73d32;
+    border-bottom: 3px solid #e46f61;
+}
+
+.modal-message.modal-warning .modal-header {
+    color: #f4b400;
+    border-bottom: 3px solid #ffce55;
+}
+
+.message-container{
+    margin-top: 200px;
+}
+
+.notifyjs-bootstrap-error {
+    margin-top:30px !important;
+}
+#addUserMetaInformation {
+    float: right;
+    margin-right: 30px;
+    margin-top: -4px;
+}
+.modal-header .close {
+    margin-top: 3px;
+}
