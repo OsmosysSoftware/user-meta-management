@@ -1,6 +1,6 @@
 # user-meta-management
 
-Contributors: Siddhartha-Osmosys
+Contributors: Osmosys
 
 Tags: user, meta, manager
 
