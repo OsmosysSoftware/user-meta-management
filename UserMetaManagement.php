@@ -3,9 +3,9 @@
 /* *
  * Plugin Name: User Meta Management
  * Plugin URI: http://osmosyssoftware.github.io/user-meta-management/
- * Description: This plugin is used to manage  the users meta information.
+ * Description: This plugin is used to manage the users meta information.
  * Version: 0.1.0
- * Author: Osmosys-Siddhartha
+ * Author: Osmosys Software Solutions
  * Author URI: http://osmosys.asia
  * License: GPLv2
  */
@@ -27,27 +27,27 @@ class UserMetaManagement {
         add_action('wp_ajax_nopriv_update_user_meta_data', array($this, 'updateUserMetaDetails')); //  Action to update the user meta details.
         add_action('wp_ajax_nopriv_delete_user_meta', array($this, 'deleteUserMetaDetails'));  // Action to delete the user meta details.
         add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__),array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
     }
 
     // Function to register all the styles.
     public function styleRegisterer() {
-        wp_register_style('user-meta-bootstrap-css', USER_META_PLUGIN_URL . '/css/bootstrap.min.css');
-        wp_register_style('user-meta-datatable-css', USER_META_PLUGIN_URL . '/css/datatable-bootstrap.css');
-        wp_register_style('user-meta-style-css', USER_META_PLUGIN_URL . '/css/style.css');
+        wp_register_style('user-meta-bootstrap-css', USER_INFORMATION_PLUGIN_URL . '/css/bootstrap.min.css');
+        wp_register_style('user-meta-datatable-css', USER_INFORMATION_PLUGIN_URL . '/css/datatable-bootstrap.css');
+        wp_register_style('user-meta-style-css', USER_INFORMATION_PLUGIN_URL . '/css/style.css');
     }
 
     //  Function to register all the scripts.
     public function scriptRegisterer() {
-        wp_register_script('user-meta-bootstrap-js', USER_META_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
-        wp_register_script("user-meta-jquery-js", USER_META_PLUGIN_URL . '/js/jquery.js', array('jquery'));
-        wp_register_script("user-meta-datatable-js", USER_META_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-        wp_register_script("user-meta-script", USER_META_PLUGIN_URL . '/js/script.js', array('jquery'));
-        wp_register_script("user-meta-notify", USER_META_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
+        wp_register_script('user-meta-bootstrap-js', USER_INFORMATION_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
+        wp_register_script("user-meta-jquery-js", USER_INFORMATION_PLUGIN_URL . '/js/jquery.js', array('jquery'));
+        wp_register_script("user-meta-datatable-js", USER_INFORMATION_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
+        wp_register_script("user-meta-script", USER_INFORMATION_PLUGIN_URL . '/js/script.js', array('jquery'));
+        wp_register_script("user-meta-notify", USER_INFORMATION_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
     }
 
     // Function to enqueue all the registered scripts and styles.
-    function enquerer() {
+    public function enquerer() {
         wp_enqueue_style('user-meta-bootstrap-css');
         wp_enqueue_style('user-meta-datatable-css');
         wp_enqueue_style('user-meta-style-css');
@@ -56,7 +56,7 @@ class UserMetaManagement {
         wp_enqueue_script('user-meta-datatable-js');
         wp_enqueue_script('user-meta-script');
         wp_enqueue_script('user-meta-notify');
-        wp_localize_script('user-meta-script', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
+        wp_localize_script('user-meta-script', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
     }
 
     // Function to parse the template.
@@ -72,13 +72,13 @@ class UserMetaManagement {
     }
 
     /* Function to show the all users of specific metakey value equals.
-     * 
+     *
      * 1) The function  accepts two parameters i.e. meta key and meta value.
      * 2) First the function get the current user details.
      * 3) If the current user is administrator then he has privilige to see the details.
      *     ohterwise the user wil be shown an error message.
      * 4) If the user is administrator then the details are passed to the template page
-     * 5) In template page we'll make use of the wordpress function get_users which accepts the meta key 
+     * 5) In template page we'll make use of the wordpress function get_users which accepts the meta key
      *    and value and by making the  compare value  equal to (=) the function will return the list of users who
      *    have the passed meta key and value matched.
      * 6) By grabbing the user id from the result we'll get the user details by using get_userdata and get_user_meta function of wordpress.
@@ -88,126 +88,141 @@ class UserMetaManagement {
      *
      */
 
-    public function showAllUsersOfSpecificMetaKey( $metakey, $metavalue ) {
-        $result = wp_get_current_user();
-        $userData = ($result->allcaps);
-        if ($userData['administrator']) {
-            $users = get_users(array(
-                'meta_key' => $metakey,
-                'meta_value' => $metavalue,
-                'meta_compare' => '=',
-            ));
-            if (count($users)) {
-                $user = array();
-                for ($j = 0; $j < count($users); $j++) {
-                    $id = (array) ($users[$j]->data);
-                    $userDetails = (array) get_userdata($id['ID']);
-                    $userMetaInformation = get_user_meta($id['ID']);
-                    $userDetailsEmail = (array) get_userdata($id['ID'])->data;
-                    $userRoles = implode(', ', get_userdata($id['ID'])->roles);
-                    $userId = $userDetails['ID'] == " " ? '------------' : $userDetails['ID'];
-                    $userFirstName = ($userMetaInformation['first_name'][0] == '' ? '   -----------  ' : $userMetaInformation['first_name'][0]);
-                    $userLastName = ($userMetaInformation['last_name'][0] == '' ? '   ------------  ' : $userMetaInformation['last_name'][0]);
-                    $userEmail = ($userDetailsEmail['user_email'] == '' ? ' ---------------------------- ' : $userDetailsEmail['user_email']);
-                    $userInformation = array('id' => $userId, 'firstName' => $userFirstName, 'lastName' => $userLastName, 'email' => $userEmail, 'role' => $userRoles);
-                    array_push($user, $userInformation);
-                }
-            } else {
-                $user = null;
-            }return ($this->parseTemplate(TEMPLATE . '/users-same-meta-information.php', $user));
-        } else {
-            echo '<h2>You are not authorised to view this page.</h2>';
-        }
-    }
+     public function showAllUsersOfSpecificMetaKey( $metakey, $metavalue ) {
+         $result = wp_get_current_user();
+         $userData = ($result->allcaps);
+         if ($userData['administrator']) {
+             $users = get_users(array(
+                 'meta_key' => $metakey,
+                 'meta_value' => $metavalue,
+                 'meta_compare' => '=',
+             ));
+             if (count($users)) {
+                 $user = array();
+                 for ($j = 0; $j < count($users); $j++) {
+                     $id = (array) ($users[$j]->data);
+                     $userDetails = (array) get_userdata($id['ID']);
+                     $userMetaInformation = get_user_meta($id['ID']);
+                     $userDetailsEmail = (array) get_userdata($id['ID'])->data;
+                     $userRoles = implode(', ', get_userdata($id['ID'])->roles);
+                     $userId = $userDetails['ID'] == " " ? '------------' : $userDetails['ID'];
+                     $userFirstName = ($userMetaInformation['first_name'][0] == '' ? '   -----------  ' : $userMetaInformation['first_name'][0]);
+                     $userLastName = ($userMetaInformation['last_name'][0] == '' ? '   ------------  ' : $userMetaInformation['last_name'][0]);
+                     $userEmail = ($userDetailsEmail['user_email'] == '' ? ' ---------------------------- ' : $userDetailsEmail['user_email']);
+                     $userInformation = array('id' => $userId, 'firstName' => $userFirstName, 'lastName' => $userLastName, 'email' => $userEmail, 'role' => $userRoles);
+                     array_push($user, $userInformation);
+                 }
+             } else {
+                 $user = null;
+             }return ($this->parseTemplate(TEMPLATE . '/users-same-meta-information.php', $user));
+         } else {
+             echo '<h2>You are not authorised to view this page.</h2>';
+         }
+     }
 
-    /* Function to search the meta key and value combinations.
+    /*
+     * Function to search the meta key and value combinations.
      * 1) From the client side the meta key and value  will be received through the ajax call.
      * 2) We'll pass the meta key and value to the showAllUsersOfSpecificMetaKey function which process the data passed and return the result.
-     * 3) The result of users who have the same meta key and value matched is echoed.  
-     *  
+     * 3) The result of users who have the same meta key and value matched is echoed.
+     *
      */
 
     public function metaSearch() {
+        check_ajax_referer('user-meta-management', 'security', 'false');
+        if (current_user_can('manage_options')) {
         $metaKey = filter_input(INPUT_POST, 'metaKey');
         $metaValue = filter_input(INPUT_POST, 'metaValue');
         echo($this->showAllUsersOfSpecificMetaKey($metaKey, $metaValue));
         die();
+      }
     }
 
-    /* Function to get the user meta details. 
+    /*
+     * Function to get the user meta details.
      * 1) The function gets user Id from the client side through the ajax call;.
-     * 2) The user is passed through the wordpress funtion get_user_meta which gives all the meta keys and values list.  
+     * 2) The user is passed through the wordpress funtion get_user_meta which gives all the meta keys and values list.
      * 3) We'll keep track of the unwanted keys and the remaining will be displayed to the user.
-     * 
+     *
      */
 
     public function getUserMetaDetails() {
-        $userId = filter_input(INPUT_POST, 'userId');
-        $excemptedList = unserialize(EXCEMPTED_LIST);
-        $metaList = get_user_meta($userId);
-        $metaListKeys = array_keys($metaList);
-        for ($i = 0; $i < count($metaListKeys); $i++) {
-            if (!in_array($metaListKeys[$i], $excemptedList)) {
-                $key = $metaListKeys[$i];
-                $value = ($metaList[$key][0] == '' ? ' ----------- ' : $metaList[$key][0]);
-                $userMetaDetailsResults[$key] = $value;
+        check_ajax_referer('user-meta-management', 'security', 'false');
+        if (current_user_can('manage_options')) {
+            $userId = filter_input(INPUT_POST, 'userId');
+            $excemptedList = unserialize(EXCEMPTED_LIST);
+            $metaList = get_user_meta($userId);
+            $metaListKeys = array_keys($metaList);
+            for ($i = 0; $i < count($metaListKeys); $i++) {
+                if (!in_array($metaListKeys[$i], $excemptedList)) {
+                    $key = $metaListKeys[$i];
+                    $value = ($metaList[$key][0] == '' ? ' ----------- ' : $metaList[$key][0]);
+                    $userMetaDetailsResults[$key] = $value;
+                }
             }
+
+            echo($this->parseTemplate(TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
+            die();
         }
-        echo($this->parseTemplate(TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
-        die();
     }
 
-    /*  . 
-     * 1) It  receives the userId and meta information to be updated from the client side through ajax call..
+    /*  .
+     * 1) Receives the userId and meta information to be updated from the client side through ajax call..
      * 2) The meta information to be updated consists of array of meta keys and values.
-     * 3) First the list of keys are passed into the variable. 
-     * 4) Then by passing the userid, meta key and meta value to the  update_user_meta function of wordpress 
+     * 3) First the list of keys are passed into the variable.
+     * 4) Then by passing the userid, meta key and meta value to the  update_user_meta function of wordpress
      *      the  meta information will be updated.
      * 5) The update_user_meta function also take care off adding the new meta information.
      *
      */
 
     public function updateUserMetaDetails() {
-        $meta = $_POST['userMetaData'];
-        $userId = filter_input(INPUT_POST, 'userId');
-        $keys = array_keys($meta);
-        for ($i = 0; $i < count($keys); $i++) {
-            $update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
+        check_ajax_referer('user-meta-management', 'security', 'false');
+        if (current_user_can('manage_options')) {
+            $meta = $_POST['userMetaData'];
+            $userId = filter_input(INPUT_POST, 'userId');
+            $keys = array_keys($meta);
+            for ($i = 0; $i < count($keys); $i++) {
+                $update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
+            }
+            if ($update) {
+                echo json_encode(array('success' => 'You have updated meta information successfully'));
+            } else {
+                echo json_encode(array('error' => 'There is nothing to update'));
+            }
+            die();
         }
-        if ($update) {
-            echo json_encode(array('success' => 'You have updated meta information successfully'));
-        } else {
-            echo json_encode(array('error' => 'There is nothing to update'));
-        }
-        die();
     }
 
     /* Function to delete the user meta information.
      * 1) This function receives the userId and meta information  to be deleted from the client side through ajax call..
      * 2) The meta information to be deleted consists of array of meta keys and values.
-     * 3) First the list of keys are passed into the variable. 
-     * 4) Then by passing the userid, meta key and meta value to the  delete_user_meta function of wordpress 
+     * 3) First the list of keys are passed into the variable.
+     * 4) Then by passing the userid, meta key and meta value to the  delete_user_meta function of wordpress
      *     the  meta information will be deleted.
      *
      */
 
     public function deleteUserMetaDetails() {
-        $metaData = $_POST['userMetaData'];
-        $userId = $_POST['userId'];
-        $keys = array_keys($metaData);
-        for ($i = 0; $i < count($keys); $i++) {
-            $delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
-        } if ($delete) {
-            echo json_encode(array('success' => 'You have deleted meta information successfully'));
-        } else {
-            echo json_encode(array('error' => 'There is nothing to delete'));
+        check_ajax_referer('user-meta-management', 'security', 'false');
+        if (current_user_can('manage_options')) {
+            $metaData = $_POST['userMetaData'];
+            $userId = $_POST['userId'];
+            $keys = array_keys($metaData);
+            for ($i = 0; $i < count($keys); $i++) {
+                $delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
+            } if ($delete) {
+                echo json_encode(array('success' => 'You have deleted meta information successfully'));
+            } else {
+                echo json_encode(array('error' => 'There is nothing to delete'));
+            }
+            die();
         }
-        die();
     }
 
     // Function to create a user page in the user secion in the user seciton.
     public function addUserPage() {
-        add_users_page('User Meta Management', 'User Meta Management', 'edit_dashboard', 'user-meta-management', array($this, 'userMetaManagement'));
+        add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'userMetaManagement'));
     }
 
     public function userMetaManagement() {
@@ -216,7 +231,7 @@ class UserMetaManagement {
         echo($this->showAllUsersOfSpecificMetaKey(null, null));
     }
 
-    public  function addActionLink( $links ) {
+    public function addActionLink( $links ) {
         $mylinks = array(
             '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
         );

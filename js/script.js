@@ -1,13 +1,13 @@
-var userMetaManager=(function(){
+var userMetaManager = (function () {
     var metaInformation = [];
     var userId;
     $('#usersMeta').dataTable({
         "dom": '<"top">rt<"bottom" pl>',
-        "order": [[ 0, "asc" ]],
+        "order": [[0, "asc"]],
         'scrollX': true,
         "autoWidth": false
     });
-    
+
     $('#submitMeta').click(function (e) {
         e.preventDefault();
         if ($('#txtMetaKey').val() !== '') {
@@ -27,7 +27,7 @@ var userMetaManager=(function(){
     $('body').on('click', '#imgClose', function () {
         jQuery('.user-meta-information').hide();
     });
-    
+
     $('body').on('click', '#updateUserMetaInformation', function () {
         var updateMetaInformation = [];
         var updatedMetaData = {};
@@ -43,10 +43,11 @@ var userMetaManager=(function(){
         }
         var data = {
             'action': 'update_user_meta_data',
+            'security': myAjax.ajax_nonce,
             'userId': userId,
             'userMetaData': updatedMetaData
         };
-        ajaxCall(data,showMessage);
+        ajaxCall(data, showMessage);
 
 
     });
@@ -54,54 +55,56 @@ var userMetaManager=(function(){
     $('body').on('click', '#addUserMetaInformation', function () {
         addMetaKeyValue();
     });
-    
+
     $('body').on('click', '#deleteUserMetaInformation', function () {
         deleteUserMetaInformation();
     });
 
-    function showMessage(data){
-	var json=JSON.parse(data);
-	jQuery('#myModal').modal('hide');
-	console.log(json.error);
-	if(json['error']){
-	    var container= jQuery('#modalnfo').find('.modal-body');
-	    jQuery(container).html(json['error']);
-	    jQuery('#modalnfo').modal('show');    
-	}
-	else{
-	var container= jQuery('#modalSuccess').find('.modal-body');
-	jQuery(container).html(json['success']);
-	jQuery('#modalSuccess').modal('show');
-}
+    // Function to show the
+    function showMessage(data) {
+        var json = JSON.parse(data);
+        jQuery('#myModal').modal('hide');
+        console.log(json.error);
+        if (json['error']) {
+            var container = jQuery('#modalnfo').find('.modal-body');
+            jQuery(container).html(json['error']);
+            jQuery('#modalnfo').modal('show');
+        }
+        else {
+            var container = jQuery('#modalSuccess').find('.modal-body');
+            jQuery(container).html(json['success']);
+            jQuery('#modalSuccess').modal('show');
+        }
     }
     // Function to get the user meta information.
     function  getUserMetaInformation() {
         var data = {
             action: "get_user_meta_details",
+            'security': myAjax.ajax_nonce,
             "userId": userId
         };
-//        getMetaMatchLIst();
         ajaxCall(data, showMetaDetails);
     }
 
     // Function to delete the User meta information from the meta list available..
     function deleteUserMetaInformation() {
-            var deleteMetaInformation = {};
-            for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
-                var check = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input:checked'));
-                if (check.length) {
-                    var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
-                    var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[2]).val();
-                    deleteMetaInformation[key] = value;
+        var deleteMetaInformation = {};
+        for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
+            var check = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input:checked'));
+            if (check.length) {
+                var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[1]).val();
+                var value = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input')[2]).val();
+                deleteMetaInformation[key] = value;
             }
-    }
-            var data = {
-                'action': 'delete_user_meta',
-                'userId': userId,
-                'userMetaData': deleteMetaInformation
-            };
-            ajaxCall(data, showMessage);
-        
+        }
+        var data = {
+            'action': 'delete_user_meta',
+            'security': myAjax.ajax_nonce,
+            'userId': userId,
+            'userMetaData': deleteMetaInformation
+        };
+        ajaxCall(data, showMessage);
+
     }
 
 // Function to shoe the user meta details.
@@ -113,20 +116,16 @@ var userMetaManager=(function(){
         jQuery('.user-meta-information').show();
         jQuery('#userMetaInformation').dataTable({
             "dom": '<"top">rt<"bottom">',
-	    "columnDefs": [
-    { "width": "180px", "targets": 1 }
-  ],
-//            "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
-//            'scrollY': true,
-//            "autoWidth": false
+            "columnDefs": [
+                {"width": "180px", "targets": 1}
+            ],
             "autoWidth": false,
-            "paging":  false,
+            "paging": false,
             "scrollY": "400px",
             "scrollCollapse": false,
-	sortable:false,
-	"bSort" : false
-} );
-       
+            sortable: false,
+            "bSort": false
+        });
 
         for (var i = 1; i < jQuery('#userMetaInformation tr').length; i++) {
             var key = jQuery(jQuery(jQuery('#userMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
@@ -134,29 +133,23 @@ var userMetaManager=(function(){
             metaInformation[key] = value;
         }
     }
-    
+
     // Function to show the meta information of the user.
-    function showmetaLIst(result) {     	    
+    function showmetaLIst(result) {
         jQuery('#usersMeta').DataTable().destroy();
         jQuery('#userMeta').DataTable().clear().draw();
         jQuery('.user-meta-information').remove();
         jQuery('.meta-results').html('');
         jQuery('.meta-table-results').html(result);
         jQuery('.user-meta-information').show();
-       $('#usersMeta').dataTable({
-	"dom": '<"top">rt<"bottom" pl>',
-	"language": {
-                    "emptyTable": "There are no users with the specificied meta combination."
-                },
-	 'scrollX': true,
-	"autoWidth": false
-	});
-        
-//        jQuery('#userMetaInformation').DataTable({
-//            "dom": '<"top">rt<"bottom" pl>',
-//            'scrollX': true,
-//            "autoWidth": false
-//        });
+        $('#usersMeta').dataTable({
+            "dom": '<"top">rt<"bottom" pl>',
+            "language": {
+                "emptyTable": "There are no users with the specificied meta combination."
+            },
+            'scrollX': true,
+            "autoWidth": false
+        });
     }
 
     // Function to get the list of users who has meta key and value matched.
@@ -166,6 +159,7 @@ var userMetaManager=(function(){
         var metaValue = jQuery('#txtMetaValue').val();
         var data = {
             action: "meta_search",
+            security: myAjax.ajax_nonce,
             "metaKey": metakey,
             "metaValue": metaValue
         };
@@ -186,7 +180,7 @@ var userMetaManager=(function(){
             },
             error: function (xhr) {
                 console.log(xhr);
-	jQuery.notify('Unable to process your request', "error");	
+                jQuery.notify('Unable to process your request', "error");
             }
         });
     }
@@ -198,9 +192,9 @@ var userMetaManager=(function(){
         appendContent += '<td><input type="text" placeholder="  Meta key....."></td>';
         appendContent += '<td><input type="text" placeholder=" Meta value...." </td></tr>';
         jQuery('#userMetaInformation').append(appendContent);
-       jQuery('html, .dataTables_scrollBody').animate({ scrollTop: jQuery('#userMetaInformation tr:last').offset().top }, 500);
-      jQuery('#updateUserMetaInformation').html('Save');
-       
+        jQuery('html, .dataTables_scrollBody').animate({scrollTop: jQuery('#userMetaInformation tr:last').offset().top}, 500);
+        jQuery('#updateUserMetaInformation').html('Save');
+
     }
 });
 jQuery(userMetaManager);
