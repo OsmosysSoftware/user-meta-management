@@ -173,10 +173,15 @@ var userMetaManager = (function () {
             type: "post",
             data: data,
             success: function (result) {
-                if (chidCbFunc) {
-                    chidCbFunc();
+                if (result !== '-1') {
+                    if (chidCbFunc) {
+                        chidCbFunc();
+                    }
+                    cbFunction(result);
                 }
-                cbFunction(result);
+                else {
+                    location.reload();
+                }
             },
             error: function (xhr) {
                 console.log(xhr);
