@@ -129,7 +129,7 @@ class UserMetaManagement {
      */
 
     public function metaSearch() {
-        check_ajax_referer('user-meta-management', 'security', 'false');
+        check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
         $metaKey = filter_input(INPUT_POST, 'metaKey');
         $metaValue = filter_input(INPUT_POST, 'metaValue');
@@ -147,7 +147,7 @@ class UserMetaManagement {
      */
 
     public function getUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', 'false');
+        check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
             $userId = filter_input(INPUT_POST, 'userId');
             $excemptedList = unserialize(EXCEMPTED_LIST);
@@ -177,7 +177,7 @@ class UserMetaManagement {
      */
 
     public function updateUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', 'false');
+        check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
             $meta = $_POST['userMetaData'];
             $userId = filter_input(INPUT_POST, 'userId');
@@ -204,7 +204,7 @@ class UserMetaManagement {
      */
 
     public function deleteUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', 'false');
+        check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
             $metaData = $_POST['userMetaData'];
             $userId = $_POST['userId'];
