@@ -28,6 +28,7 @@ class UserMetaManagement {
         add_action('wp_ajax_nopriv_delete_user_meta', array($this, 'deleteUserMetaDetails'));  // Action to delete the user meta details.
         add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
+        add_filter( 'nonce_life', array($this,'nonceLifeTime')); 
     }
 
     // Function to register all the styles.
@@ -230,7 +231,11 @@ class UserMetaManagement {
         echo($this->showMetaForm());
         echo($this->showAllUsersOfSpecificMetaKey(null, null));
     }
-
+    // Fixing the nonce life time to 4 hours.
+     public function nonceLifeTime($time){ 
+        return 60*60*4;
+    }
+    // Adding the settings options to the user meta management plugin.
     public function addActionLink( $links ) {
         $mylinks = array(
             '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
