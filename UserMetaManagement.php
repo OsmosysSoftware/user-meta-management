@@ -32,18 +32,18 @@ class UserMetaManagement {
 
     // Function to register all the styles.
     public function styleRegisterer() {
-        wp_register_style('user-meta-bootstrap-css', USER_INFORMATION_PLUGIN_URL . '/css/bootstrap.min.css');
-        wp_register_style('user-meta-datatable-css', USER_INFORMATION_PLUGIN_URL . '/css/datatable-bootstrap.css');
-        wp_register_style('user-meta-style-css', USER_INFORMATION_PLUGIN_URL . '/css/style.css');
+        wp_register_style('user-meta-bootstrap-css', USER_META_PLUGIN_URL . '/css/bootstrap.min.css');
+        wp_register_style('user-meta-datatable-css', USER_META_PLUGIN_URL . '/css/datatable-bootstrap.css');
+        wp_register_style('user-meta-style-css', USER_META_PLUGIN_URL . '/css/style.css');
     }
 
     //  Function to register all the scripts.
     public function scriptRegisterer() {
-        wp_register_script('user-meta-bootstrap-js', USER_INFORMATION_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
-        wp_register_script("user-meta-jquery-js", USER_INFORMATION_PLUGIN_URL . '/js/jquery.js', array('jquery'));
-        wp_register_script("user-meta-datatable-js", USER_INFORMATION_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-        wp_register_script("user-meta-script", USER_INFORMATION_PLUGIN_URL . '/js/script.js', array('jquery'));
-        wp_register_script("user-meta-notify", USER_INFORMATION_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
+        wp_register_script('user-meta-bootstrap-js', USER_META_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
+        wp_register_script("user-meta-jquery-js", USER_META_PLUGIN_URL . '/js/jquery.js', array('jquery'));
+        wp_register_script("user-meta-datatable-js", USER_META_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
+        wp_register_script("user-meta-script", USER_META_PLUGIN_URL . '/js/script.js', array('jquery'));
+        wp_register_script("user-meta-notify", USER_META_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
     }
 
     // Function to enqueue all the registered scripts and styles.
