@@ -19,7 +19,6 @@ License URI: http://osmosyssoftware.github.io/user-meta-management/
 
 ## Description 
 
-* manages the user meta information.
 * User can add the new custom meta key.
 * User can update the meta information.
 * User can delete the custom meta information.
