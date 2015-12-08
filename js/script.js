@@ -1,6 +1,7 @@
 var userMetaManager = (function () {
     var metaInformation = [];
     var userId;
+    $('.add-meta-btn').hide();
     $('#usersMeta').dataTable({
         "dom": '<"top">rt<"bottom" pl>',
         "order": [[0, "asc"]],
@@ -13,7 +14,7 @@ var userMetaManager = (function () {
         if ($('#txtMetaKey').val() !== '') {
             getMetaMatchLIst();
         } else {
-            $('#txtMetaKey').addClass('error');
+            location.reload();
         }
     });
 
@@ -48,8 +49,6 @@ var userMetaManager = (function () {
             'userMetaData': updatedMetaData
         };
         ajaxCall(data, showMessage);
-
-
     });
 
     $('body').on('click', '#addUserMetaInformation', function () {
@@ -58,6 +57,50 @@ var userMetaManager = (function () {
 
     $('body').on('click', '#deleteUserMetaInformation', function () {
         deleteUserMetaInformation();
+    });
+    $('#btnAddMeta').click(function (e) {
+        e.preventDefault();
+        var data = {
+            'action': 'get_users',
+            'security': myAjax.ajax_nonce
+        };
+        ajaxCall(data, bindUserData);
+    });
+    $('#btnAddUserMeta').click(function () {
+        var users = $('#ddlUsers').val();
+        var data = {
+            'action': 'add_user_meta_data',
+            'security': myAjax.ajax_nonce,
+            'metaKey': $('#txtMetaUserKey').val(),
+            'metaValue': $('#txtMetaUserValue').val(),
+            'users': users
+        };
+        ajaxCall(data, showMessage);
+    });
+
+    $('.filtered-list').click(function () {
+        $('#mdlUserFilterMeta').modal('show');
+    });
+
+    $('#btnDefaultMeta').click(function () {
+        $('#mdlUserMetaSettings').modal('show');
+    });
+    $('#btnAddFilterUserMeta').click(function () {
+        var usersList = [];
+        var userTable = jQuery('#usersMeta tr');
+        for (var i = 1; i < userTable.length; i++) {
+            var table = jQuery(jQuery('#usersMeta tr')[i]).find('td');
+            var user = jQuery(table[0]).text();
+            usersList.push(user);
+        }
+        var data = {
+            'action': 'add_user_meta_data',
+            'security': myAjax.ajax_nonce,
+            'metaKey': $('#txtFilterMetaUserKey').val(),
+            'metaValue': $('#txtFilterMetaUserValue').val(),
+            'users': usersList
+        };
+        ajaxCall(data, showMessage);
     });
 
     // Function to show the
@@ -150,6 +193,13 @@ var userMetaManager = (function () {
             'scrollX': true,
             "autoWidth": false
         });
+        var table = jQuery(jQuery('#usersMeta tr')[1]).find('td');
+        if (table.length > 1) {
+            jQuery('.add-meta-btn').show();
+        }
+        else {
+            jQuery('.add-meta-btn').hide();
+        }
     }
 
     // Function to get the list of users who has meta key and value matched.
@@ -160,13 +210,13 @@ var userMetaManager = (function () {
         var data = {
             action: "meta_search",
             security: myAjax.ajax_nonce,
-            "metaKey": metakey,
-            "metaValue": metaValue
+            metaKey: metakey,
+            metaValue: metaValue
         };
         ajaxCall(data, showmetaLIst);
     }
 
-// Function to make a ajax call
+    // Function to make a ajax call
     function ajaxCall(data, cbFunction, chidCbFunc) {
         jQuery.ajax({
             url: myAjax.ajaxurl,
@@ -191,7 +241,7 @@ var userMetaManager = (function () {
     }
 
 
-// Function to append the new meta key and value to the existing meta information.
+    // Function to append the new meta key and value to the existing meta information.
     function addMetaKeyValue() {
         var appendContent = '<tr id="div-16"><td><input  type="checkbox" name="meta[]"></td>';
         appendContent += '<td><input type="text" placeholder="  Meta key....."></td>';
@@ -200,6 +250,21 @@ var userMetaManager = (function () {
         jQuery('html, .dataTables_scrollBody').animate({scrollTop: jQuery('#userMetaInformation tr:last').offset().top}, 500);
         jQuery('#updateUserMetaInformation').html('Save');
 
+    }
+
+
+    function bindUserData(result) {
+        var usersData = JSON.parse(result);
+        var keys = Object.keys(usersData);
+        var option = '';
+        for (var i = 0; i < keys.length; i++) {
+            option += '<option value="' + keys[i] + '">' + usersData[keys[i]] + '</option>';
+        }
+        jQuery('#ddlUsers').find('option').remove();
+        jQuery('#ddlUsers').append(option);
+        jQuery('.chosen-select').chosen({width: "570px"});
+        jQuery('.chosen-select').trigger("chosen:updated");
+        jQuery('#modalUserMeta').modal('show');
     }
 });
 jQuery(userMetaManager);

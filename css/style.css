@@ -12,7 +12,7 @@
 #userMetaForm{
     margin:10px;
     text-align: center;
-/*    margin:10px !important;    */
+    /*    margin:10px !important;    */
 }
 .dataTable th{
     text-align: center;
@@ -21,10 +21,11 @@
     text-align: center;
 }
 .meta-results{
-    width:100%;
     height:auto;
     margin:auto;
-   
+    width: 98%;
+    margin-right: 2%;
+
 }
 /*.user-meta-results{
     position:fixed;
@@ -175,4 +176,13 @@
 }
 .modal-header .close {
     margin-top: 3px;
+}
+#btnAddMeta{;
+    margin:10px;
+}
+.add-meta-btn{
+    display:none;
+}
+.modal-dialog-custom{
+    margin-top:100px;
 }
