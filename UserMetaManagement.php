@@ -14,50 +14,40 @@ require_once( __DIR__ . '/config.php');
 class UserMetaManagement {
 
     public function __construct() {
-        $this->styleRegisterer();
-        $this->scriptRegisterer();
+	add_action('wp_enqueue_scripts', array($this, 'enquerer')); // enqueue styles and scripts       
         add_shortcode('show_meta_form', array($this, 'showMetaForm')); // Shortcode to view the form.
         add_shortcode('specific_metakey', array($this, 'showAllUsersOfSpecificMetaKey')); // Shortcode to show the users of specific meta key combinations.
         add_action('wp_ajax_meta_search', array($this, 'metaSearch')); // Action to search the meta key value combinations.
         add_action('wp_ajax_get_user_meta_details', array($this, 'getUserMetaDetails'));  // Action to show  user meta information to the admin.
         add_action('wp_ajax_update_user_meta_data', array($this, 'updateUserMetaDetails')); // Action to update the user meta information.
         add_action('wp_ajax_delete_user_meta', array($this, 'deleteUserMetaDetails')); // Action to delete the user meta information.
-        add_action('wp_ajax_nopriv_meta_search', array($this, 'metaSearch')); // Action to search the user meta information.
-        add_action('wp_ajax_nopriv_get_user_meta_details', array($this, 'getUserMetaDetails')); // Action to get the user meta details.
-        add_action('wp_ajax_nopriv_update_user_meta_data', array($this, 'updateUserMetaDetails')); //  Action to update the user meta details.
-        add_action('wp_ajax_nopriv_delete_user_meta', array($this, 'deleteUserMetaDetails'));  // Action to delete the user meta details.
         add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
         add_filter( 'nonce_life', array($this,'nonceLifeTime')); 
     }
-
-    // Function to register all the styles.
-    public function styleRegisterer() {
-        wp_register_style('user-meta-bootstrap-css', USER_META_PLUGIN_URL . '/css/bootstrap.min.css');
+    
+    // Function to enqueue all the registered scripts and styles.
+    public function enquerer() {	
+	wp_register_style('user-meta-bootstrap-css', USER_META_PLUGIN_URL . '/css/bootstrap.min.css');
         wp_register_style('user-meta-datatable-css', USER_META_PLUGIN_URL . '/css/datatable-bootstrap.css');
         wp_register_style('user-meta-style-css', USER_META_PLUGIN_URL . '/css/style.css');
-    }
-
-    //  Function to register all the scripts.
-    public function scriptRegisterer() {
-        wp_register_script('user-meta-bootstrap-js', USER_META_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
+	
+        wp_enqueue_style('user-meta-bootstrap-css');
+        wp_enqueue_style('user-meta-datatable-css');
+        wp_enqueue_style('user-meta-style-css');
+	
+	wp_register_script('user-meta-bootstrap-js', USER_META_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
         wp_register_script("user-meta-jquery-js", USER_META_PLUGIN_URL . '/js/jquery.js', array('jquery'));
         wp_register_script("user-meta-datatable-js", USER_META_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
         wp_register_script("user-meta-script", USER_META_PLUGIN_URL . '/js/script.js', array('jquery'));
         wp_register_script("user-meta-notify", USER_META_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
-    }
-
-    // Function to enqueue all the registered scripts and styles.
-    public function enquerer() {
-        wp_enqueue_style('user-meta-bootstrap-css');
-        wp_enqueue_style('user-meta-datatable-css');
-        wp_enqueue_style('user-meta-style-css');
+	
         wp_enqueue_script('user-meta-jquery-js');
         wp_enqueue_script('user-meta-bootstrap-js');
         wp_enqueue_script('user-meta-datatable-js');
         wp_enqueue_script('user-meta-script');
         wp_enqueue_script('user-meta-notify');
-        wp_localize_script('user-meta-script', 'myAjax', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
+        wp_localize_script('user-meta-script', 'userMetaData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
     }
 
     // Function to parse the template.
@@ -151,11 +141,11 @@ class UserMetaManagement {
         check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
             $userId = filter_input(INPUT_POST, 'userId');
-            $excemptedList = unserialize(EXCEMPTED_LIST);
+            $exemptedList = unserialize(EXEMPTED_LIST);
             $metaList = get_user_meta($userId);
             $metaListKeys = array_keys($metaList);
             for ($i = 0; $i < count($metaListKeys); $i++) {
-                if (!in_array($metaListKeys[$i], $excemptedList)) {
+                if (!in_array($metaListKeys[$i], $exemptedList)) {
                     $key = $metaListKeys[$i];
                     $value = ($metaList[$key][0] == '' ? ' ----------- ' : $metaList[$key][0]);
                     $userMetaDetailsResults[$key] = $value;
@@ -180,7 +170,7 @@ class UserMetaManagement {
     public function updateUserMetaDetails() {
         check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
-            $meta = $_POST['userMetaData'];
+	    $meta = $_POST['userMetaData'];
             $userId = filter_input(INPUT_POST, 'userId');
             $keys = array_keys($meta);
             for ($i = 0; $i < count($keys); $i++) {
@@ -208,7 +198,7 @@ class UserMetaManagement {
         check_ajax_referer('user-meta-management', 'security', TRUE);
         if (current_user_can('manage_options')) {
             $metaData = $_POST['userMetaData'];
-            $userId = $_POST['userId'];
+            $userId = filter_input(INPUT_POST, 'userId');
             $keys = array_keys($metaData);
             for ($i = 0; $i < count($keys); $i++) {
                 $delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
@@ -233,7 +223,8 @@ class UserMetaManagement {
     }
     // Fixing the nonce life time to 4 hours.
      public function nonceLifeTime($time){ 
-        return 60*60*4;
+	$nonceLifeTime = unserialize(NONCE_LIFE_TIME);
+        return $nonceLifeTime;   
     }
     // Adding the settings options to the user meta management plugin.
     public function addActionLink( $links ) {

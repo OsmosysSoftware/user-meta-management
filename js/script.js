@@ -43,7 +43,7 @@ var userMetaManager = (function () {
         }
         var data = {
             'action': 'update_user_meta_data',
-            'security': myAjax.ajax_nonce,
+            'security': userMetaData.ajax_nonce,
             'userId': userId,
             'userMetaData': updatedMetaData
         };
@@ -80,7 +80,7 @@ var userMetaManager = (function () {
     function  getUserMetaInformation() {
         var data = {
             action: "get_user_meta_details",
-            'security': myAjax.ajax_nonce,
+            'security': userMetaData.ajax_nonce,
             "userId": userId
         };
         ajaxCall(data, showMetaDetails);
@@ -99,7 +99,7 @@ var userMetaManager = (function () {
         }
         var data = {
             'action': 'delete_user_meta',
-            'security': myAjax.ajax_nonce,
+            'security': userMetaData.ajax_nonce,
             'userId': userId,
             'userMetaData': deleteMetaInformation
         };
@@ -159,7 +159,7 @@ var userMetaManager = (function () {
         var metaValue = jQuery('#txtMetaValue').val();
         var data = {
             action: "meta_search",
-            security: myAjax.ajax_nonce,
+            security: userMetaData.ajax_nonce,
             "metaKey": metakey,
             "metaValue": metaValue
         };
@@ -169,7 +169,7 @@ var userMetaManager = (function () {
 // Function to make a ajax call
     function ajaxCall(data, cbFunction, chidCbFunc) {
         jQuery.ajax({
-            url: myAjax.ajaxurl,
+            url: userMetaData.ajaxurl,
             type: "post",
             data: data,
             success: function (result) {

@@ -9,11 +9,11 @@
     <tbody >
         <?php 
       require_once( __DIR__ . '/../config.php');
-      $deleteExcemptedList = unserialize(DELETE_EXCEMPTED_LIST);
+      $deleteExemptedList = unserialize(DELETE_EXEMPTED_LIST);
         foreach ($inputData as $key => $value) { ?>
             <tr>
                 <?php 
-            if(in_array($key, $deleteExcemptedList) )
+            if(in_array($key, $deleteExemptedList) )
             { 
             ?>
                 <td></td>
