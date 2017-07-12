@@ -42,10 +42,10 @@ var userMetaManager = (function () {
             }
         }
         var data = {
-            'action': 'update_user_meta_data',
-            'security': userMetaData.ajax_nonce,
-            'userId': userId,
-            'userMetaData': updatedMetaData
+            action: 'update_user_meta_data',
+            security: UMMData.ajax_nonce,
+            userId: userId,
+            UMMData: updatedMetaData
         };
         ajaxCall(data, showMessage);
 
@@ -80,8 +80,8 @@ var userMetaManager = (function () {
     function  getUserMetaInformation() {
         var data = {
             action: "get_user_meta_details",
-            'security': userMetaData.ajax_nonce,
-            "userId": userId
+            security: UMMData.ajax_nonce,
+            userId: userId
         };
         ajaxCall(data, showMetaDetails);
     }
@@ -98,10 +98,10 @@ var userMetaManager = (function () {
             }
         }
         var data = {
-            'action': 'delete_user_meta',
-            'security': userMetaData.ajax_nonce,
-            'userId': userId,
-            'userMetaData': deleteMetaInformation
+            action: 'delete_user_meta',
+            security: UMMData.ajax_nonce,
+            userId: userId,
+            UMMData: deleteMetaInformation
         };
         ajaxCall(data, showMessage);
 
@@ -158,10 +158,10 @@ var userMetaManager = (function () {
         var metakey = jQuery('#txtMetaKey').val();
         var metaValue = jQuery('#txtMetaValue').val();
         var data = {
-            action: "meta_search",
-            security: userMetaData.ajax_nonce,
-            "metaKey": metakey,
-            "metaValue": metaValue
+            action: 'meta_search',
+            security: UMMData.ajax_nonce,
+            metaKey: metakey,
+            metaValue: metaValue
         };
         ajaxCall(data, showmetaLIst);
     }
@@ -169,7 +169,7 @@ var userMetaManager = (function () {
 // Function to make a ajax call
     function ajaxCall(data, cbFunction, chidCbFunc) {
         jQuery.ajax({
-            url: userMetaData.ajaxurl,
+            url: UMMData.ajaxurl,
             type: "post",
             data: data,
             success: function (result) {

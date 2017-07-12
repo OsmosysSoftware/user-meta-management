@@ -9,7 +9,7 @@
     <tbody >
         <?php 
       require_once( __DIR__ . '/../config.php');
-      $deleteExemptedList = unserialize(DELETE_EXEMPTED_LIST);
+      $deleteExemptedList = unserialize(UMM_DELETE_EXEMPTED_LIST);
         foreach ($inputData as $key => $value) { ?>
             <tr>
                 <?php 

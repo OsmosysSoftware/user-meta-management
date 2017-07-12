@@ -14,52 +14,51 @@ require_once( __DIR__ . '/config.php');
 class UserMetaManagement {
 
     public function __construct() {
-	add_action('wp_enqueue_scripts', array($this, 'enquerer')); // enqueue styles and scripts       
-        add_shortcode('show_meta_form', array($this, 'showMetaForm')); // Shortcode to view the form.
-        add_shortcode('specific_metakey', array($this, 'showAllUsersOfSpecificMetaKey')); // Shortcode to show the users of specific meta key combinations.
-        add_action('wp_ajax_meta_search', array($this, 'metaSearch')); // Action to search the meta key value combinations.
-        add_action('wp_ajax_get_user_meta_details', array($this, 'getUserMetaDetails'));  // Action to show  user meta information to the admin.
-        add_action('wp_ajax_update_user_meta_data', array($this, 'updateUserMetaDetails')); // Action to update the user meta information.
-        add_action('wp_ajax_delete_user_meta', array($this, 'deleteUserMetaDetails')); // Action to delete the user meta information.
-        add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
-        add_filter( 'nonce_life', array($this,'nonceLifeTime')); 
+	add_shortcode('show_meta_form', array($this, 'showMetaForm')); // Shortcode to view the form.
+	add_shortcode('specific_metakey', array($this, 'showAllUsersOfSpecificMetaKey')); // Shortcode to show the users of specific meta key combinations.
+	add_action('wp_ajax_meta_search', array($this, 'metaSearch')); // Action to search the meta key value combinations.
+	add_action('wp_ajax_get_user_meta_details', array($this, 'getUserMetaDetails'));  // Action to show  user meta information to the admin.
+	add_action('wp_ajax_update_user_meta_data', array($this, 'updateUserMetaDetails')); // Action to update the user meta information.
+	add_action('wp_ajax_delete_user_meta', array($this, 'deleteUserMetaDetails')); // Action to delete the user meta information.
+	add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
+	add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
+	add_filter('nonce_life', array($this, 'nonceLifeTime'));
     }
-    
+
     // Function to enqueue all the registered scripts and styles.
-    public function enquerer() {	
-	wp_register_style('user-meta-bootstrap-css', USER_META_PLUGIN_URL . '/css/bootstrap.min.css');
-        wp_register_style('user-meta-datatable-css', USER_META_PLUGIN_URL . '/css/datatable-bootstrap.css');
-        wp_register_style('user-meta-style-css', USER_META_PLUGIN_URL . '/css/style.css');
-	
-        wp_enqueue_style('user-meta-bootstrap-css');
-        wp_enqueue_style('user-meta-datatable-css');
-        wp_enqueue_style('user-meta-style-css');
-	
-	wp_register_script('user-meta-bootstrap-js', USER_META_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
-        wp_register_script("user-meta-jquery-js", USER_META_PLUGIN_URL . '/js/jquery.js', array('jquery'));
-        wp_register_script("user-meta-datatable-js", USER_META_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-        wp_register_script("user-meta-script", USER_META_PLUGIN_URL . '/js/script.js', array('jquery'));
-        wp_register_script("user-meta-notify", USER_META_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
-	
-        wp_enqueue_script('user-meta-jquery-js');
-        wp_enqueue_script('user-meta-bootstrap-js');
-        wp_enqueue_script('user-meta-datatable-js');
-        wp_enqueue_script('user-meta-script');
-        wp_enqueue_script('user-meta-notify');
-        wp_localize_script('user-meta-script', 'userMetaData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
+    public function enquerer() {
+	wp_register_style('user-meta-bootstrap-css', UMM_PLUGIN_URL . '/css/bootstrap.min.css');
+	wp_register_style('user-meta-datatable-css', UMM_PLUGIN_URL . '/css/datatable-bootstrap.css');
+	wp_register_style('user-meta-style-css', UMM_PLUGIN_URL . '/css/style.css');
+
+	wp_enqueue_style('user-meta-bootstrap-css');
+	wp_enqueue_style('user-meta-datatable-css');
+	wp_enqueue_style('user-meta-style-css');
+
+	wp_register_script('user-meta-bootstrap-js', UMM_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
+	wp_register_script("user-meta-jquery-js", UMM_PLUGIN_URL . '/js/jquery.js', array('jquery'));
+	wp_register_script("user-meta-datatable-js", UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
+	wp_register_script("user-meta-script", UMM_PLUGIN_URL . '/js/script.js', array('jquery'));
+	wp_register_script("user-meta-notify", UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
+
+	wp_enqueue_script('user-meta-jquery-js');
+	wp_enqueue_script('user-meta-bootstrap-js');
+	wp_enqueue_script('user-meta-datatable-js');
+	wp_enqueue_script('user-meta-script');
+	wp_enqueue_script('user-meta-notify');
+	wp_localize_script('user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
     }
 
     // Function to parse the template.
-    public function parseTemplate( $file, $inputData ) {
-        ob_start();
-        include ($file);
-        return ob_get_clean();
+    public function parseTemplate($file, $inputData) {
+	ob_start();
+	include ($file);
+	return ob_get_clean();
     }
 
     // Function to show the meta form.
     public function showMetaForm() {
-        return ($this->parseTemplate(TEMPLATE . '/meta-form.php', null));
+	return ($this->parseTemplate(UMM_TEMPLATE . '/meta-form.php', null));
     }
 
     /* Function to show the all users of specific metakey value equals.
@@ -79,37 +78,37 @@ class UserMetaManagement {
      *
      */
 
-     public function showAllUsersOfSpecificMetaKey( $metakey, $metavalue ) {
-         $result = wp_get_current_user();
-         $userData = ($result->allcaps);
-         if ($userData['administrator']) {
-             $users = get_users(array(
-                 'meta_key' => $metakey,
-                 'meta_value' => $metavalue,
-                 'meta_compare' => '=',
-             ));
-             if (count($users)) {
-                 $user = array();
-                 for ($j = 0; $j < count($users); $j++) {
-                     $id = (array) ($users[$j]->data);
-                     $userDetails = (array) get_userdata($id['ID']);
-                     $userMetaInformation = get_user_meta($id['ID']);
-                     $userDetailsEmail = (array) get_userdata($id['ID'])->data;
-                     $userRoles = implode(', ', get_userdata($id['ID'])->roles);
-                     $userId = $userDetails['ID'] == " " ? '------------' : $userDetails['ID'];
-                     $userFirstName = ($userMetaInformation['first_name'][0] == '' ? '   -----------  ' : $userMetaInformation['first_name'][0]);
-                     $userLastName = ($userMetaInformation['last_name'][0] == '' ? '   ------------  ' : $userMetaInformation['last_name'][0]);
-                     $userEmail = ($userDetailsEmail['user_email'] == '' ? ' ---------------------------- ' : $userDetailsEmail['user_email']);
-                     $userInformation = array('id' => $userId, 'firstName' => $userFirstName, 'lastName' => $userLastName, 'email' => $userEmail, 'role' => $userRoles);
-                     array_push($user, $userInformation);
-                 }
-             } else {
-                 $user = null;
-             }return ($this->parseTemplate(TEMPLATE . '/users-same-meta-information.php', $user));
-         } else {
-             echo '<h2>You are not authorised to view this page.</h2>';
-         }
-     }
+    public function showAllUsersOfSpecificMetaKey($metakey, $metavalue) {
+	$result = wp_get_current_user();
+	$userData = ($result->allcaps);
+	if ($userData['administrator']) {
+	    $users = get_users(array(
+		'meta_key' => $metakey,
+		'meta_value' => $metavalue,
+		'meta_compare' => '=',
+	    ));
+	    if (count($users)) {
+		$user = array();
+		for ($j = 0; $j < count($users); $j++) {
+		    $id = (array) ($users[$j]->data);
+		    $userDetails = (array) get_userdata($id['ID']);
+		    $userMetaInformation = get_user_meta($id['ID']);
+		    $userDetailsEmail = (array) get_userdata($id['ID'])->data;
+		    $userRoles = implode(', ', get_userdata($id['ID'])->roles);
+		    $userId = $userDetails['ID'] == " " ? '--' : $userDetails['ID'];
+		    $userFirstName = ($userMetaInformation['first_name'][0] == '' ? '--' : $userMetaInformation['first_name'][0]);
+		    $userLastName = ($userMetaInformation['last_name'][0] == '' ? '--' : $userMetaInformation['last_name'][0]);
+		    $userEmail = ($userDetailsEmail['user_email'] == '' ? '--' : $userDetailsEmail['user_email']);
+		    $userInformation = array('id' => $userId, 'firstName' => $userFirstName, 'lastName' => $userLastName, 'email' => $userEmail, 'role' => $userRoles);
+		    array_push($user, $userInformation);
+		}
+	    } else {
+		$user = null;
+	    } return ($this->parseTemplate(UMM_TEMPLATE . '/users-same-meta-information.php', $user));
+	} else {
+	    echo '<h2>You are not authorised to view this page.</h2>';
+	}
+    }
 
     /*
      * Function to search the meta key and value combinations.
@@ -120,13 +119,13 @@ class UserMetaManagement {
      */
 
     public function metaSearch() {
-        check_ajax_referer('user-meta-management', 'security', TRUE);
-        if (current_user_can('manage_options')) {
-        $metaKey = filter_input(INPUT_POST, 'metaKey');
-        $metaValue = filter_input(INPUT_POST, 'metaValue');
-        echo($this->showAllUsersOfSpecificMetaKey($metaKey, $metaValue));
-        die();
-      }
+	check_ajax_referer('user-meta-management', 'security', TRUE);
+	if (current_user_can('manage_options')) {
+	    $metaKey = filter_input(INPUT_POST, 'metaKey');
+	    $metaValue = filter_input(INPUT_POST, 'metaValue');
+	    echo($this->showAllUsersOfSpecificMetaKey($metaKey, $metaValue));
+	    die();
+	}
     }
 
     /*
@@ -138,23 +137,23 @@ class UserMetaManagement {
      */
 
     public function getUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', TRUE);
-        if (current_user_can('manage_options')) {
-            $userId = filter_input(INPUT_POST, 'userId');
-            $exemptedList = unserialize(EXEMPTED_LIST);
-            $metaList = get_user_meta($userId);
-            $metaListKeys = array_keys($metaList);
-            for ($i = 0; $i < count($metaListKeys); $i++) {
-                if (!in_array($metaListKeys[$i], $exemptedList)) {
-                    $key = $metaListKeys[$i];
-                    $value = ($metaList[$key][0] == '' ? ' ----------- ' : $metaList[$key][0]);
-                    $userMetaDetailsResults[$key] = $value;
-                }
-            }
+	check_ajax_referer('user-meta-management', 'security', TRUE);
+	if (current_user_can('manage_options')) {
+	    $userId = filter_input(INPUT_POST, 'userId');
+	    $exemptedList = unserialize(UMM_EXEMPTED_LIST);
+	    $metaList = get_user_meta($userId);
+	    $metaListKeys = array_keys($metaList);
+	    for ($i = 0; $i < count($metaListKeys); $i++) {
+		if (!in_array($metaListKeys[$i], $exemptedList)) {
+		    $key = $metaListKeys[$i];
+		    $value = ($metaList[$key][0] == '' ? '--' : $metaList[$key][0]);
+		    $userMetaDetailsResults[$key] = $value;
+		}
+	    }
 
-            echo($this->parseTemplate(TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
-            die();
-        }
+	    echo($this->parseTemplate(UMM_TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
+	    die();
+	}
     }
 
     /*  .
@@ -168,21 +167,21 @@ class UserMetaManagement {
      */
 
     public function updateUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', TRUE);
-        if (current_user_can('manage_options')) {
-	    $meta = $_POST['userMetaData'];
-            $userId = filter_input(INPUT_POST, 'userId');
-            $keys = array_keys($meta);
-            for ($i = 0; $i < count($keys); $i++) {
-                $update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
-            }
-            if ($update) {
-                echo json_encode(array('success' => 'You have updated meta information successfully'));
-            } else {
-                echo json_encode(array('error' => 'There is nothing to update'));
-            }
-            die();
-        }
+	check_ajax_referer('user-meta-management', 'security', TRUE);
+	if (current_user_can('manage_options')) {
+	    $meta = $_POST['UMMData'];
+	    $userId = filter_input(INPUT_POST, 'userId');
+	    $keys = array_keys($meta);
+	    for ($i = 0; $i < count($keys); $i++) {
+		$update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
+	    }
+	    if ($update) {
+		echo json_encode(array('success' => 'You have updated meta information successfully'));
+	    } else {
+		echo json_encode(array('error' => 'There is nothing to update'));
+	    }
+	    die();
+	}
     }
 
     /* Function to delete the user meta information.
@@ -195,43 +194,45 @@ class UserMetaManagement {
      */
 
     public function deleteUserMetaDetails() {
-        check_ajax_referer('user-meta-management', 'security', TRUE);
-        if (current_user_can('manage_options')) {
-            $metaData = $_POST['userMetaData'];
-            $userId = filter_input(INPUT_POST, 'userId');
-            $keys = array_keys($metaData);
-            for ($i = 0; $i < count($keys); $i++) {
-                $delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
-            } if ($delete) {
-                echo json_encode(array('success' => 'You have deleted meta information successfully'));
-            } else {
-                echo json_encode(array('error' => 'There is nothing to delete'));
-            }
-            die();
-        }
+	check_ajax_referer('user-meta-management', 'security', TRUE);
+	if (current_user_can('manage_options')) {
+	    $metaData = $_POST['UMMData'];
+	    $userId = filter_input(INPUT_POST, 'userId');
+	    $keys = array_keys($metaData);
+	    for ($i = 0; $i < count($keys); $i++) {
+		$delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
+	    } if ($delete) {
+		echo json_encode(array('success' => 'You have deleted meta information successfully'));
+	    } else {
+		echo json_encode(array('error' => 'There is nothing to delete'));
+	    }
+	    die();
+	}
     }
 
     // Function to create a user page in the user secion in the user seciton.
     public function addUserPage() {
-        add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'userMetaManagement'));
+	add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'userMetaManagement'));
     }
 
     public function userMetaManagement() {
-        $this->enquerer();
-        echo($this->showMetaForm());
-        echo($this->showAllUsersOfSpecificMetaKey(null, null));
+	$this->enquerer();
+	echo($this->showMetaForm());
+	echo($this->showAllUsersOfSpecificMetaKey(null, null));
     }
+
     // Fixing the nonce life time to 4 hours.
-     public function nonceLifeTime($time){ 
-	$nonceLifeTime = unserialize(NONCE_LIFE_TIME);
-        return $nonceLifeTime;   
+    public function nonceLifeTime($time) {
+	$nonceLifeTime = unserialize(UMM_NONCE_LIFE_TIME);
+	return $nonceLifeTime;
     }
+
     // Adding the settings options to the user meta management plugin.
-    public function addActionLink( $links ) {
-        $mylinks = array(
-            '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
-        );
-        return array_merge($links, $mylinks);
+    public function addActionLink($links) {
+	$mylinks = array(
+	    '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
+	);
+	return array_merge($links, $mylinks);
     }
 
 }
