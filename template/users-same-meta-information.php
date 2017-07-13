@@ -5,11 +5,11 @@ require_once( __DIR__ . '/../config.php');
     <table id="usersMeta" class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Email</th>
-                <th>Role</th>
+                <th>ID<i class="fa fa-fw fa-sort"></i></th>
+                <th>First name<i class="fa fa-fw fa-sort"></i></th>
+                <th>Last name<i class="fa fa-fw fa-sort"></i></th>
+                <th>Email<i class="fa fa-fw fa-sort"></i></th>
+                <th>Role<i class="fa fa-fw fa-sort"></i></th>
             </tr>    
         </thead>
         <tbody>

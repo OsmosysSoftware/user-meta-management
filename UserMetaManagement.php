@@ -13,7 +13,8 @@ require_once( __DIR__ . '/config.php');
 
 class UserMetaManagement {
 
-    public function __construct() {
+    public function __construct() {	
+	add_action('admin_enqueue_scripts', array($this, 'enquerer'));
 	add_shortcode('show_meta_form', array($this, 'showMetaForm')); // Shortcode to view the form.
 	add_shortcode('specific_metakey', array($this, 'showAllUsersOfSpecificMetaKey')); // Shortcode to show the users of specific meta key combinations.
 	add_action('wp_ajax_meta_search', array($this, 'metaSearch')); // Action to search the meta key value combinations.
@@ -26,29 +27,35 @@ class UserMetaManagement {
     }
 
     // Function to enqueue all the registered scripts and styles.
-    public function enquerer() {
-	wp_register_style('user-meta-bootstrap-css', UMM_PLUGIN_URL . '/css/bootstrap.min.css');
+    public function enquerer($hook) {
+	
+	if( $hook !== unserialize(UMM_PAGE_NAME)) {
+	    return;
+	}
+	
+//	wp_register_style('user-meta-bootstrap-css', UMM_PLUGIN_URL . '/css/bootstrap.min.css');
+	wp_register_style('user-meta-font-awesome-css', UMM_PLUGIN_URL . '/css/font-awesome.min.css');
 	wp_register_style('user-meta-datatable-css', UMM_PLUGIN_URL . '/css/datatable-bootstrap.css');
 	wp_register_style('user-meta-style-css', UMM_PLUGIN_URL . '/css/style.css');
 
-	wp_enqueue_style('user-meta-bootstrap-css');
+//	wp_enqueue_style('user-meta-bootstrap-css');
+	wp_enqueue_style('user-meta-font-awesome-css');
 	wp_enqueue_style('user-meta-datatable-css');
 	wp_enqueue_style('user-meta-style-css');
+	wp_enqueue_style (  'wp-jquery-ui-dialog');
 
-	wp_register_script('user-meta-bootstrap-js', UMM_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
-	wp_register_script("user-meta-jquery-js", UMM_PLUGIN_URL . '/js/jquery.js', array('jquery'));
+//	wp_register_script('user-meta-bootstrap-js', UMM_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
 	wp_register_script("user-meta-datatable-js", UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-	wp_register_script("user-meta-script", UMM_PLUGIN_URL . '/js/script.js', array('jquery'));
+	wp_register_script("user-meta-script", UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'));
 	wp_register_script("user-meta-notify", UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
-
-	wp_enqueue_script('user-meta-jquery-js');
-	wp_enqueue_script('user-meta-bootstrap-js');
+	
+//	wp_enqueue_script('user-meta-bootstrap-js');
 	wp_enqueue_script('user-meta-datatable-js');
 	wp_enqueue_script('user-meta-script');
 	wp_enqueue_script('user-meta-notify');
-	wp_localize_script('user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
+	wp_localize_script('user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));	
     }
-
+ 
     // Function to parse the template.
     public function parseTemplate($file, $inputData) {
 	ob_start();
@@ -216,7 +223,6 @@ class UserMetaManagement {
     }
 
     public function userMetaManagement() {
-	$this->enquerer();
 	echo($this->showMetaForm());
 	echo($this->showAllUsersOfSpecificMetaKey(null, null));
     }

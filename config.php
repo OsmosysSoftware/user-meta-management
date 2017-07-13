@@ -13,3 +13,6 @@ define("UMM_EXEMPTED_LIST", serialize(array('session_tokens', 'mylogin_capabilit
 define("UMM_DELETE_EXEMPTED_LIST", serialize(array('first_name', 'last_name', 'nickname')));
 
 define("UMM_NONCE_LIFE_TIME", serialize('14400'));
+
+// Defining page name of the plugin.
+define("UMM_PAGE_NAME", serialize('users_page_user-meta-management'));
