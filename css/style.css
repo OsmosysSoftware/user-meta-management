@@ -4,10 +4,6 @@
 }
 #userMetaForm label{
     display: inline-block;
-    width:95px;
-}
-#userMetaForm input{
-    margin-right:10px;
 }
 #userMetaForm{
     margin:10px;
@@ -20,13 +16,6 @@
     margin:auto;
    
 }
-/*.user-meta-results{
-    position:fixed;
-    width:500px;
-    top:40px;
-    right:40px;
-    text-align: center;
-}*/
 .paginate_button {
     margin:5px;
     cursor:pointer;
@@ -190,25 +179,20 @@
 .dialog-alert.ui-dialog-content {
     padding: 0;
 }
-.dialog-title, .dialog-body, .dialog-footer{
+.dialog-title, .dialog-body, .dialog-footer{    
+    color: #737373;
     padding-left: 20px;
     padding-right: 36px;
     padding-top: 5px;
     padding-bottom: 10px;
     text-align: center;
 }
-/*.ui-dialog-titlebar {
-    display: none;
-}*/
 table.dataTable thead .sorting:after, table.dataTable thead .sorting:before {
     display: none;
 }
 table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
     display: none;
 }
-/*.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-   background-color: #f9f9f9;
-}*/
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
@@ -339,8 +323,11 @@ input[type="submit"], input[type="button"], button {
 .text-center{
     text-align: center;
 }
-#userMetaInformation {
+#userMetaDetails {
     border: 1px solid #ddd;
+}
+#userMetaDetails table {
+    border-bottom: 1px solid #ddd;
 }
 .dialog-form-header {
     padding-top: 10px;
@@ -351,11 +338,54 @@ input[type="submit"], input[type="button"], button {
 }
 #dialogForm {
     border-top: 1px #ddd;
-/*    border-bottom: 1px #ddd;*/
 }
 .ui-dialog-buttonpane {
     display: none;
 }
 .meta-results table th {
     text-align: left;
+}
+.dialog-title {
+    font-size: 15px;
+}
+.dialog-body {
+    font-size: 14px;
+}
+.meta-form .form-inline label {
+    font-size: 14px;
+    font-weight: bold;
+}
+.meta-form .form-inline .form-group input {
+    height: 32px;
+}
+.form-inline #submitMeta {
+    vertical-align: top;
+}
+.meta-form, #usersMeta_paginate.dataTables_paginate, .meta-results table {
+    padding-right: 20px;
+}
+.meta-results table thead > tr > th {
+    padding-right: 0;
+    padding-left: 8px;
+}
+@media (max-width: 767px) { 
+    
+    .meta-form input[type="submit"] {
+	display: block;
+	float: right;
+    }
+    .meta-form .form-inline .form-group {
+	display: block;
+    }
+    .meta-form .form-inline .form-group input {
+	width: 70%;	
+	float: right;
+	margin-bottom: 10px;
+    }
+    .meta-form .form-group, .meta-form input[type="submit"] {
+	clear: both;
+    }
+    .meta-results {
+	padding-top: 3em;
+    }
 }

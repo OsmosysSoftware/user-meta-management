@@ -3,49 +3,40 @@ var userMetaManager = (function () {
     var metaInformation = [];
     var userId;
        
-    $(".dialog-info, .dialog-warning, .dialog-danger, .dialog-success").dialog({autoOpen: false, modal:true});   
+    $(".dialog-info, .dialog-warning, .dialog-danger, .dialog-success").dialog({
+	autoOpen: false,
+	modal:true,
+	open: function () {
+	    designAlertDialogBoxes();
+	}
+    });   
     $(".close-dialog").click(function (){
 	$(".dialog-info, .dialog-warning, .dialog-danger, .dialog-success").dialog('close');	
     });   
-    
-//    ('<i class="fa fa-envelope fa-x"></i>')
-    
-    var dialog = $("#dialogForm").dialog({
+        
+    var metaFormDialog = $("#dialogForm").dialog({
       autoOpen: false,
       resizable: false,
-      width: 'auto',
-//      position: ['center',20],
-//      width: 700,
+      height: 560,
+      width: 520,
       modal: true,
       buttons: {
         Cancel: function() {
-          dialog.dialog("close");
+          metaFormDialog.dialog("close");
         }
       },
       open: function () {
-//	  $(this).dialog('option', 'position', 'top');
 	if ($(this).parent().find('.ui-dialog-titlebar .dialog-form-heading').length === 0) {
 	    $(this).parent().find('.ui-dialog-titlebar').addClass('dialog-form-header').append('<span class="dialog-form-heading">User meta information</span><button type="button" id="addUserMetaInformation"   class="btn btn-primary text-right">Add Meta Key</button>');
 	}
       },      
       close: function() {
-	
-	var alertDialogs = ['.dialog-info', '.dialog-warning', '.dialog-danger', '.dialog-success'];
-	var alertDialogTitleBars = ['ui-info-dialog-titlebar', 'ui-warning-dialog-titlebar', 'ui-danger-dialog-titlebar', 'ui-success-dialog-titlebar'];
-	for(var i=0; i<alertDialogs.length; i++) {
-	    $alertDialog = $(alertDialogs[i]).parent().find('.ui-dialog-titlebar'); 
-	    if($alertDialog.length > 0) {
-		$alertDialog.removeClass('ui-info-dialog-titlebar ui-warning-dialog-titlebar ui-danger-dialog-titlebar ui-success-dialog-titlebar').addClass(alertDialogTitleBars[i]);
-		if($alertDialog.find('.fa-envelope').length === 0) {
-		    $alertDialog.append('<i class="fa fa-envelope fa-2x"></i>');
-		}	
-	    }
-	}
+		
       }
     });
         
-    jQuery("a.user-mail").click(function (){
-	dialog.dialog('open');
+    $("a.user-mail").click(function (){
+	metaFormDialog.dialog('open');
     });
     
     $('#usersMeta').dataTable({
@@ -53,13 +44,13 @@ var userMetaManager = (function () {
         "order": [[0, "asc"]],
         'scrollX': true,
         "autoWidth": false,
-	"columnDefs": [{ 
-		"width": "20%", "targets": 0,
-		"width": "20%", "targets": 1,
-		"width": "20%", "targets": 2,
-		"width": "20%", "targets": 3,
-		"width": "20%", "targets": 4
-	    }]
+	"columnDefs": [
+	    { "width": "20%", "targets": 0 },
+	    { "width": "10%", "targets": 1 },
+	    { "width": "20%", "targets": 2 },
+	    { "width": "15%", "targets": 3 },
+	    { "width": "10%", "targets": 4 }
+	]
     });
 
     $('#submitMeta').click(function (e) {
@@ -114,22 +105,37 @@ var userMetaManager = (function () {
         deleteUserMetaInformation();
     });
 
+    /**
+     * Method to add styles to the alert message dialog boxes.
+     */
+    function designAlertDialogBoxes() {
+	var alertDialogs = ['.dialog-info', '.dialog-warning', '.dialog-danger', '.dialog-success'];
+	    var alertDialogTitleBars = ['ui-info-dialog-titlebar', 'ui-warning-dialog-titlebar', 'ui-danger-dialog-titlebar', 'ui-success-dialog-titlebar'];
+	    for (var i = 0; i < alertDialogs.length; i++) {
+		$alertDialog = $(alertDialogs[i]).parent().find('.ui-dialog-titlebar');
+		if ($alertDialog.length > 0) {
+		    $alertDialog.removeClass('ui-info-dialog-titlebar ui-warning-dialog-titlebar ui-danger-dialog-titlebar ui-success-dialog-titlebar').addClass(alertDialogTitleBars[i]);
+		    if ($alertDialog.find('.fa-envelope').length === 0) {
+			$alertDialog.append('<i class="fa fa-envelope fa-2x"></i>');
+		    }
+		}
+	    }
+    }
+    
     // Function to show the
     function showMessage(data) {
         var json = JSON.parse(data);
-        dialog.dialog('close');
+        metaFormDialog.dialog('close');
         console.log(json.error);
         if (json['error']) {
             var container = jQuery('#modalInfo').find('.modal-body');
             jQuery(container).html(json['error']);
-	    jQuery('#modalInfo').dialog();
-            jQuery('#modalInfo').dialog('open');
+	    jQuery('#modalInfo').dialog().dialog('open');
 	}
         else {
             var container = jQuery('#modalSuccess').find('.modal-body');
             jQuery(container).html(json['success']);
-	    jQuery('#modalSuccess').dialog();
-            jQuery('#modalSuccess').dialog('open');
+	    jQuery('#modalSuccess').dialog().dialog('open');
         }
     }
     // Function to get the user meta information.
@@ -168,7 +174,6 @@ var userMetaManager = (function () {
         metaInformation = [];
         jQuery('#userMetaInformation').DataTable().destroy();
         jQuery('#userMetaDetails').html(result);
-//        dialog.dialog('open');
         jQuery('.user-meta-information').show();
         jQuery('#userMetaInformation').dataTable({
             "dom": '<"top">rt<"bottom">',

@@ -25,7 +25,7 @@
     <div class="dialog-content">
         <div class=" message-container">
             <div class="dialog-title">Success</div>
-	    <div class="dialog-body"></div>	    
+	    <div class="dialog-body">You have updated meta information successfully</div>	    
             <div class="dialog-footer">
                 <button type="button" class="btn btn-success close-dialog">OK</button>
             </div>

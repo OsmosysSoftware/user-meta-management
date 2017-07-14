@@ -28,28 +28,24 @@ class UserMetaManagement {
 
     // Function to enqueue all the registered scripts and styles.
     public function enquerer($hook) {
-	
+	// Checking the page name, if it is not user meta management page, then scripts and styles will not be enqueued
 	if( $hook !== unserialize(UMM_PAGE_NAME)) {
 	    return;
 	}
 	
-//	wp_register_style('user-meta-bootstrap-css', UMM_PLUGIN_URL . '/css/bootstrap.min.css');
 	wp_register_style('user-meta-font-awesome-css', UMM_PLUGIN_URL . '/css/font-awesome.min.css');
 	wp_register_style('user-meta-datatable-css', UMM_PLUGIN_URL . '/css/datatable-bootstrap.css');
 	wp_register_style('user-meta-style-css', UMM_PLUGIN_URL . '/css/style.css');
 
-//	wp_enqueue_style('user-meta-bootstrap-css');
 	wp_enqueue_style('user-meta-font-awesome-css');
 	wp_enqueue_style('user-meta-datatable-css');
 	wp_enqueue_style('user-meta-style-css');
 	wp_enqueue_style (  'wp-jquery-ui-dialog');
 
-//	wp_register_script('user-meta-bootstrap-js', UMM_PLUGIN_URL . '/js/bootstrap.min.js', array('jquery'));
 	wp_register_script("user-meta-datatable-js", UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
 	wp_register_script("user-meta-script", UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'));
 	wp_register_script("user-meta-notify", UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
 	
-//	wp_enqueue_script('user-meta-bootstrap-js');
 	wp_enqueue_script('user-meta-datatable-js');
 	wp_enqueue_script('user-meta-script');
 	wp_enqueue_script('user-meta-notify');
