@@ -2,15 +2,14 @@
 .error{
     border: 1px solid #ff0000 !important;
 }
-#userMetaForm label{
+.umm-meta-form #userMetaForm label{
     display: inline-block;
 }
-#userMetaForm{
+.umm-meta-form #userMetaForm{
     margin:10px;
     text-align: center;
-/*    margin:10px !important;    */
 }
-.meta-results{
+.umm-meta-results{
     width:100%;
     height:auto;
     margin:auto;
@@ -47,139 +46,53 @@
     margin-top:0px;
     margin-left: 60px;  
 }
-.user-mail{
+#UMMUsersMeta .user-mail{
     cursor:pointer;
 }
-#userMetaInformation{
+#UMMUserMetaInformation{
     width:100%;
 }
-#userMetaInformation th:first-child{
+#UMMUserMetaInformation th:first-child{
     width:60px !important;
 }
-#userMetaInformation th.sorting{
+#UMMUserMetaInformation th.sorting{
     width:55px !important;
 }
 .dataTables_scrollHeadInner,.dataTable {
     width:100% !important;
 }
-.modal-content {
-    -webkit-border-radius: 0;
-    -webkit-background-clip: padding-box;
-    -moz-border-radius: 0;
-    -moz-background-clip: padding;
-    border-radius: 6px;
-    background-clip: padding-box;
-    -webkit-box-shadow: 0 0 40px rgba(0,0,0,.5);
-    -moz-box-shadow: 0 0 40px rgba(0,0,0,.5);
-    box-shadow: 0 0 40px rgba(0,0,0,.5);
-    color: #000;
-    background-color: #fff;
-    border: rgba(0,0,0,0);
-}
-.modal-message .modal-dialog {
-    width: 300px;
-}
-.modal-message .modal-body, .modal-message .modal-footer, .modal-message .modal-header, .modal-message .modal-title {
-    background: 0 0;
-    border: none;
-    margin: 0;
-    padding: 0 20px;
-    text-align: center!important;
-}
-
-.modal-message .modal-title {
-    font-size: 17px;
-    color: #737373;
-    margin-bottom: 3px;
-}
-
-.modal-message .modal-body {
-    color: #737373;
-}
-
-.modal-message .modal-header {
-    color: #fff;
-    margin-bottom: 10px;
-    padding: 15px 0 8px;
-}
-.modal-message .modal-header .fa, 
-.modal-message .modal-header 
-.glyphicon, .modal-message 
-.modal-header .typcn, .modal-message .modal-header .wi {
-    font-size: 30px;
-}
-
-.modal-message .modal-footer {
-    margin: 25px 0 20px;
-    padding-bottom: 10px;
-}
-
-.modal-backdrop.in {
-    zoom: 1;
-    filter: alpha(opacity=75);
-    -webkit-opacity: .75;
-    -moz-opacity: .75;
-    opacity: .75;
-}
-.modal-backdrop {
-    background-color: #fff;
-}
-.modal-message.modal-success .modal-header {
-    color: #53a93f;
-    border-bottom: 3px solid #a0d468;
-}
-
-.modal-message.modal-info .modal-header {
-    color: #57b5e3;
-    border-bottom: 3px solid #57b5e3;
-}
-
-.modal-message.modal-danger .modal-header {
-    color: #d73d32;
-    border-bottom: 3px solid #e46f61;
-}
-
-.modal-message.modal-warning .modal-header {
-    color: #f4b400;
-    border-bottom: 3px solid #ffce55;
-}
-
 .notifyjs-bootstrap-error {
     margin-top:30px !important;
 }
-#addUserMetaInformation {
+#UMMAddUserMetaInformation {
     float: right;
 }
-.modal-header .close {
-    margin-top: 3px;
-}
-
-.dialog-info .dialog-content .dialog-header {
+.umm-dialog-alert.dialog-info .dialog-content .dialog-header {
     color: #57b5e3;
     border-bottom: 3px solid #57b5e3;
 }
-.dialog-warning .dialog-content .dialog-header {
+.umm-dialog-alert.dialog-warning .dialog-content .dialog-header {
     color: #f4b400;
     border-bottom: 3px solid #ffce55;
 }
-.dialog-danger .dialog-content .dialog-header {
+.umm-dialog-alert.dialog-danger .dialog-content .dialog-header {
     color: #d73d32;
     border-bottom: 3px solid #e46f61;
 }
-.dialog-success .dialog-content .dialog-header {
+.umm-dialog-alert.dialog-success .dialog-content .dialog-header {
     color: #53a93f;
     border-bottom: 3px solid #a0d468;
 }
-.dialog-content .dialog-header {
+.umm-dialog-alert .dialog-content .dialog-header {
     min-height: 16.43px;
     margin-bottom: 10px;
     padding: 15px 0 8px;
     text-align: center;
 }
-.dialog-alert.ui-dialog-content {
+.umm-dialog-alert .ui-dialog-content {
     padding: 0;
 }
-.dialog-title, .dialog-body, .dialog-footer{    
+.umm-dialog-alert .dialog-title, .umm-dialog-alert .dialog-body, .umm-dialog-alert .dialog-footer{    
     color: #737373;
     padding-left: 20px;
     padding-right: 36px;
@@ -199,25 +112,25 @@ table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:af
 div#wpwrap {
     background: #fff;
 }
-.table-striped > tbody > tr {
+.umm-table.table-striped > tbody > tr {
     border-bottom: 1px #ddd;
 }
-thead {
+.umm-table thead {
     border-bottom: 1px solid #ddd;
 }
-table {
+.umm-table {
     font-size: 14px;
 }
-table td {
+.umm-table td {
     padding: 8px;
 }
-table th, table td {
+.umm-table th, .umm-table td {
     border: none;
 }
-.meta-form .form-inline .form-group {
+.umm-meta-form .form-inline .form-group {
     display: inline-block;
 }
-.btn {
+.umm-btn {
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
@@ -235,56 +148,56 @@ table th, table td {
 input[type="submit"], input[type="button"], button {
     cursor: pointer;
 }
-.form-inline#userMetaForm {
+.umm-meta-form .form-inline#userMetaForm {
     margin-top: 2em;
     margin-bottom: 2em;
 }
-.btn-primary {
+.umm-btn-primary {
     color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
 }   
-.btn-primary:hover {
+.umm-btn-primary:hover {
     color: #fff;
     background-color: #286090;
     border-color: #204d74;
 }
-.btn-success {
+.umm-btn-success {
     color: #fff;
     background-color: #5cb85c;
     border-color: #4cae4c;
 }
-.btn-success:hover {
+.umm-btn-success:hover {
     color: #fff;
     background-color: #449d44;
     border-color: #398439;
 }
-.btn-warning {
+.umm-btn-warning {
     color: #fff;
     background-color: #f0ad4e;
     border-color: #eea236;
 }
-.btn-warning:hover {
+.umm-btn-warning:hover {
     color: #fff;
     background-color: #ec971f;
     border-color: #d58512;
 }
-.btn-danger {
+.umm-btn-danger {
     color: #fff;
     background-color: #d9534f;
     border-color: #d43f3a;
 }
-.btn-danger:hover {
+.umm-btn-danger:hover {
     color: #fff;
     background-color: #c9302c;
     border-color: #ac2925;
 }
-.btn-info {
+.umm-btn-info {
     color: #fff;
     background-color: #5bc0de;
     border-color: #46b8da;
 }
-.btn-info:hover {
+.umm-btn-info:hover {
     color: #fff;
     background-color: #31b0d5;
     border-color: #269abc;
@@ -317,32 +230,29 @@ input[type="submit"], input[type="button"], button {
 .ui-danger-dialog-titlebar .ui-dialog-titlebar-close, .ui-success-dialog-titlebar .ui-dialog-titlebar-close {
     margin-top: 8px;
 }
-.text-right {
+.umm-text-right {
     text-align: right;
 }
-.text-center{
-    text-align: center;
-}
-#userMetaDetails {
+#UMMDialogForm #userMetaDetails {
     border: 1px solid #ddd;
 }
-#userMetaDetails table {
+#UMMDialogForm #userMetaDetails .umm-table {
     border-bottom: 1px solid #ddd;
 }
 .dialog-form-header {
     padding-top: 10px;
     padding-bottom: 5px;
 }
-.dialog-form-header .ui-dialog-titlebar-close {
+.umm-dialog-alert .dialog-form-header .ui-dialog-titlebar-close {
     padding-top: 9px;
 }
-#dialogForm {
+#UMMDialogForm {
     border-top: 1px #ddd;
 }
 .ui-dialog-buttonpane {
     display: none;
 }
-.meta-results table th {
+.umm-meta-results .umm-table th {
     text-align: left;
 }
 .dialog-title {
@@ -351,41 +261,40 @@ input[type="submit"], input[type="button"], button {
 .dialog-body {
     font-size: 14px;
 }
-.meta-form .form-inline label {
+.umm-meta-form .form-inline label {
     font-size: 14px;
     font-weight: bold;
 }
-.meta-form .form-inline .form-group input {
+.umm-meta-form .form-inline .form-group input {
     height: 32px;
 }
 .form-inline #submitMeta {
     vertical-align: top;
 }
-.meta-form, #usersMeta_paginate.dataTables_paginate, .meta-results table {
+.umm-meta-form, #usersMeta_paginate.dataTables_paginate, .umm-meta-results .umm-table {
     padding-right: 20px;
 }
-.meta-results table thead > tr > th {
+.umm-meta-results .umm-table thead > tr > th {
     padding-right: 0;
     padding-left: 8px;
 }
-@media (max-width: 767px) { 
-    
-    .meta-form input[type="submit"] {
+@media (max-width: 767px) {     
+    .umm-meta-form input[type="submit"] {
 	display: block;
 	float: right;
     }
-    .meta-form .form-inline .form-group {
+    .umm-meta-form .form-inline .form-group {
 	display: block;
     }
-    .meta-form .form-inline .form-group input {
+    .umm-meta-form .form-inline .form-group input {
 	width: 70%;	
 	float: right;
 	margin-bottom: 10px;
     }
-    .meta-form .form-group, .meta-form input[type="submit"] {
+    .umm-meta-form .form-group, .umm-meta-form input[type="submit"] {
 	clear: both;
     }
-    .meta-results {
+    .umm-meta-results {
 	padding-top: 3em;
     }
 }

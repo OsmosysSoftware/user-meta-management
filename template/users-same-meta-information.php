@@ -1,8 +1,8 @@
 <?php
 require_once( __DIR__ . '/../config.php');
 ?>
-<div class="meta-results">
-    <table id="usersMeta" class="table table-striped">
+<div class="umm-meta-results">
+    <table id="UMMUsersMeta" class="umm-table table-striped">
         <thead>
             <tr>
 		<th>Email<i class="fa fa-fw fa-sort"></i></th>

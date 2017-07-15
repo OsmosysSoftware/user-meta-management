@@ -1,4 +1,4 @@
-<table id="userMetaInformation" class=" table table-striped table-bordered">
+<table id="UMMUserMetaInformation" class="umm-table table-striped table-bordered">
     <thead>
         <tr>
             <th></th>

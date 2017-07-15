@@ -11,57 +11,63 @@
  */
 require_once( __DIR__ . '/config.php');
 
-class UserMetaManagement {
+class UMMUserMetaManagement {
 
     public function __construct() {	
-	add_action('admin_enqueue_scripts', array($this, 'enquerer'));
-	add_shortcode('show_meta_form', array($this, 'showMetaForm')); // Shortcode to view the form.
-	add_shortcode('specific_metakey', array($this, 'showAllUsersOfSpecificMetaKey')); // Shortcode to show the users of specific meta key combinations.
-	add_action('wp_ajax_meta_search', array($this, 'metaSearch')); // Action to search the meta key value combinations.
-	add_action('wp_ajax_get_user_meta_details', array($this, 'getUserMetaDetails'));  // Action to show  user meta information to the admin.
-	add_action('wp_ajax_update_user_meta_data', array($this, 'updateUserMetaDetails')); // Action to update the user meta information.
-	add_action('wp_ajax_delete_user_meta', array($this, 'deleteUserMetaDetails')); // Action to delete the user meta information.
-	add_action('admin_menu', array($this, 'addUserPage')); // Action to add the user page to user section in the admin dashboard.
-	add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); // Filter to add the settings option to the plugin.
-	add_filter('nonce_life', array($this, 'nonceLifeTime'));
+	add_action('admin_enqueue_scripts', array($this, 'UMMEnquerer'));
+	// Shortcode to view the form.
+	add_shortcode('show_meta_form', array($this, 'UMMShowMetaForm'));
+	// Shortcode to show the users of specific meta key combinations.
+	add_shortcode('specific_metakey', array($this, 'UMMShowAllUsersOfSpecificMetaKey')); 
+	// Action to search the meta key value combinations.
+	add_action('wp_ajax_meta_search', array($this, 'UMMMetaSearch')); 
+	// Action to show  user meta information to the admin.
+	add_action('wp_ajax_get_user_meta_details', array($this, 'UMMGetUserMetaDetails'));  
+	// Action to update the user meta information.
+	add_action('wp_ajax_update_user_meta_data', array($this, 'UMMUpdateUserMetaDetails')); 
+	// Action to delete the user meta information.
+	add_action('wp_ajax_delete_user_meta', array($this, 'UMMDeleteUserMetaDetails')); 
+	// Action to add the user page to user section in the admin dashboard.
+	add_action('admin_menu', array($this, 'UMMAddUserPage')); 
+	// Filter to add the settings option to the plugin.
+	add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'UMMAddActionLink')); 
+	add_filter('nonce_life', array($this, 'UMMNonceLifeTime'));
     }
 
     // Function to enqueue all the registered scripts and styles.
-    public function enquerer($hook) {
+    public function UMMEnquerer($hook) {
 	// Checking the page name, if it is not user meta management page, then scripts and styles will not be enqueued
 	if( $hook !== unserialize(UMM_PAGE_NAME)) {
 	    return;
 	}
 	
-	wp_register_style('user-meta-font-awesome-css', UMM_PLUGIN_URL . '/css/font-awesome.min.css');
-	wp_register_style('user-meta-datatable-css', UMM_PLUGIN_URL . '/css/datatable-bootstrap.css');
-	wp_register_style('user-meta-style-css', UMM_PLUGIN_URL . '/css/style.css');
+	wp_register_style(PLUGIN_PREFIX.'user-meta-font-awesome-css', UMM_PLUGIN_URL . '/css/font-awesome.min.css');
+	wp_register_style(PLUGIN_PREFIX.'user-meta-datatable-css', UMM_PLUGIN_URL . '/css/datatable-bootstrap.css');
+	wp_register_style(PLUGIN_PREFIX.'user-meta-style-css', UMM_PLUGIN_URL . '/css/style.css');
 
-	wp_enqueue_style('user-meta-font-awesome-css');
-	wp_enqueue_style('user-meta-datatable-css');
-	wp_enqueue_style('user-meta-style-css');
-	wp_enqueue_style (  'wp-jquery-ui-dialog');
+	wp_enqueue_style(PLUGIN_PREFIX.'user-meta-font-awesome-css');
+	wp_enqueue_style(PLUGIN_PREFIX.'user-meta-datatable-css');
+	wp_enqueue_style(PLUGIN_PREFIX.'user-meta-style-css');
+	wp_enqueue_style ('wp-jquery-ui-dialog');
 
-	wp_register_script("user-meta-datatable-js", UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-	wp_register_script("user-meta-script", UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'));
-	wp_register_script("user-meta-notify", UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
-	
-	wp_enqueue_script('user-meta-datatable-js');
-	wp_enqueue_script('user-meta-script');
-	wp_enqueue_script('user-meta-notify');
-	wp_localize_script('user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));	
+	wp_register_script(PLUGIN_PREFIX.'user-meta-datatable-js', UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
+	wp_register_script(PLUGIN_PREFIX.'user-meta-script', UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'));
+	wp_register_script(PLUGIN_PREFIX.'user-meta-notify', UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
+	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-datatable-js');
+	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-script');
+	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-notify');
+	wp_localize_script(PLUGIN_PREFIX.'user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
     }
- 
     // Function to parse the template.
-    public function parseTemplate($file, $inputData) {
+    public function UMMParseTemplate($file, $inputData) {
 	ob_start();
 	include ($file);
 	return ob_get_clean();
     }
 
     // Function to show the meta form.
-    public function showMetaForm() {
-	return ($this->parseTemplate(UMM_TEMPLATE . '/meta-form.php', null));
+    public function UMMShowMetaForm() {
+	return ($this->UMMParseTemplate(UMM_TEMPLATE . '/meta-form.php', null));
     }
 
     /* Function to show the all users of specific metakey value equals.
@@ -80,8 +86,7 @@ class UserMetaManagement {
      * 9) The result will be returned to the client side.
      *
      */
-
-    public function showAllUsersOfSpecificMetaKey($metakey, $metavalue) {
+    public function UMMShowAllUsersOfSpecificMetaKey($metakey, $metavalue) {
 	$result = wp_get_current_user();
 	$userData = ($result->allcaps);
 	if ($userData['administrator']) {
@@ -107,7 +112,8 @@ class UserMetaManagement {
 		}
 	    } else {
 		$user = null;
-	    } return ($this->parseTemplate(UMM_TEMPLATE . '/users-same-meta-information.php', $user));
+	    } 
+	    return ($this->UMMParseTemplate(UMM_TEMPLATE . '/users-same-meta-information.php', $user));
 	} else {
 	    echo '<h2>You are not authorised to view this page.</h2>';
 	}
@@ -116,17 +122,16 @@ class UserMetaManagement {
     /*
      * Function to search the meta key and value combinations.
      * 1) From the client side the meta key and value  will be received through the ajax call.
-     * 2) We'll pass the meta key and value to the showAllUsersOfSpecificMetaKey function which process the data passed and return the result.
+     * 2) We'll pass the meta key and value to the UMMShowAllUsersOfSpecificMetaKey function which process the data passed and return the result.
      * 3) The result of users who have the same meta key and value matched is echoed.
      *
      */
-
-    public function metaSearch() {
+    public function UMMMetaSearch() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $metaKey = filter_input(INPUT_POST, 'metaKey');
 	    $metaValue = filter_input(INPUT_POST, 'metaValue');
-	    echo($this->showAllUsersOfSpecificMetaKey($metaKey, $metaValue));
+	    echo($this->UMMShowAllUsersOfSpecificMetaKey($metaKey, $metaValue));
 	    die();
 	}
     }
@@ -138,8 +143,7 @@ class UserMetaManagement {
      * 3) We'll keep track of the unwanted keys and the remaining will be displayed to the user.
      *
      */
-
-    public function getUserMetaDetails() {
+    public function UMMGetUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $userId = filter_input(INPUT_POST, 'userId');
@@ -154,7 +158,7 @@ class UserMetaManagement {
 		}
 	    }
 
-	    echo($this->parseTemplate(UMM_TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
+	    echo($this->UMMParseTemplate(UMM_TEMPLATE . '/user-meta-information.php', $userMetaDetailsResults));
 	    die();
 	}
     }
@@ -168,8 +172,7 @@ class UserMetaManagement {
      * 5) The update_user_meta function also take care off adding the new meta information.
      *
      */
-
-    public function updateUserMetaDetails() {
+    public function UMMUpdateUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $meta = $_POST['UMMData'];
@@ -195,8 +198,7 @@ class UserMetaManagement {
      *     the  meta information will be deleted.
      *
      */
-
-    public function deleteUserMetaDetails() {
+    public function UMMDeleteUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $metaData = $_POST['UMMData'];
@@ -214,23 +216,23 @@ class UserMetaManagement {
     }
 
     // Function to create a user page in the user secion in the user seciton.
-    public function addUserPage() {
-	add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'userMetaManagement'));
+    public function UMMAddUserPage() {
+	add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'UMMUserMetaDataManagement'));
     }
 
-    public function userMetaManagement() {
-	echo($this->showMetaForm());
-	echo($this->showAllUsersOfSpecificMetaKey(null, null));
+    public function UMMUserMetaDataManagement() {
+	echo($this->UMMShowMetaForm());
+	echo($this->UMMShowAllUsersOfSpecificMetaKey(null, null));
     }
 
-    // Fixing the nonce life time to 4 hours.
-    public function nonceLifeTime($time) {
+    // Fixing the nonce life time.
+    public function UMMNonceLifeTime($time) {
 	$nonceLifeTime = unserialize(UMM_NONCE_LIFE_TIME);
 	return $nonceLifeTime;
     }
 
     // Adding the settings options to the user meta management plugin.
-    public function addActionLink($links) {
+    public function UMMAddActionLink($links) {
 	$mylinks = array(
 	    '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
 	);
@@ -239,4 +241,4 @@ class UserMetaManagement {
 
 }
 
-$meta = new UserMetaManagement();
+$meta = new UMMUserMetaManagement();

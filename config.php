@@ -16,3 +16,6 @@ define("UMM_NONCE_LIFE_TIME", serialize('14400'));
 
 // Defining page name of the plugin.
 define("UMM_PAGE_NAME", serialize('users_page_user-meta-management'));
+
+// Defining plugin prefix constant
+define("PLUGIN_PREFIX", 'UMM');
