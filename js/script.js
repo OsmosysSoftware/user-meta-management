@@ -33,10 +33,6 @@
 	    }
 	});
 
-	$("a.user-mail").click(function () {
-	    metaFormDialog.dialog('open');
-	});
-
 	$('#UMMUsersMeta').dataTable({
 	    dom: '<"top">rt<"bottom" pl>',
 	    order: [[0, "asc"]],
@@ -65,6 +61,7 @@
 	    $('.user-meta-results').html('');
 	    userId = +($($(this).parents('tr').find('#userId')).html());
 	    getUserMetaInformation();
+	    metaFormDialog.dialog('open');
 	});
 
 	$('body').on('click', '#imgClose', function () {
@@ -131,11 +128,11 @@
 	    metaFormDialog.dialog('close');
 	    console.log(json.error);
 	    if (json['error']) {
-		var container = $('#UMMModalInfo').find('.modal-body');
+		var container = $('#UMMModalInfo').find('.dialog-body');
 		$(container).html(json['error']);
 		$('#UMMModalInfo').dialog().dialog('open');
 	    } else {
-		var container = $('#modalSuccess').find('.modal-body');
+		var container = $('#modalSuccess').find('.dialog-body');
 		$(container).html(json['success']);
 		$('#modalSuccess').dialog().dialog('open');
 	    }
