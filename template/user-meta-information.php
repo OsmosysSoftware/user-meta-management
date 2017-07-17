@@ -1,4 +1,4 @@
-<table id="userMetaInformation" class=" table table-striped table-bordered">
+<table id="UMMUserMetaInformation" class="umm-table table-striped table-bordered">
     <thead>
         <tr>
             <th></th>
@@ -9,11 +9,11 @@
     <tbody >
         <?php 
       require_once( __DIR__ . '/../config.php');
-      $deleteExcemptedList = unserialize(DELETE_EXCEMPTED_LIST);
+      $deleteExemptedList = unserialize(UMM_DELETE_EXEMPTED_LIST);
         foreach ($inputData as $key => $value) { ?>
             <tr>
                 <?php 
-            if(in_array($key, $deleteExcemptedList) )
+            if(in_array($key, $deleteExemptedList) )
             { 
             ?>
                 <td></td>
