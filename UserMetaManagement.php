@@ -4,11 +4,14 @@
  * Plugin Name: User Meta Management
  * Plugin URI: http://osmosyssoftware.github.io/user-meta-management/
  * Description: This plugin is used to manage the users meta information.
- * Version: 0.1.0
+ * Version: 0.0.1
  * Author: Osmosys Software Solutions
  * Author URI: http://osmosys.asia
- * License: GPLv2
+ * License: MIT
  */
+
+define('VERSION', '0.0.1');
+
 require_once( __DIR__ . '/config.php');
 
 class UMMUserMetaManagement {
@@ -32,9 +35,17 @@ class UMMUserMetaManagement {
 	// Filter to add the settings option to the plugin.
 	add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'addActionLink')); 
 	add_filter('nonce_life', array($this, 'nonceLifeTime'));
+	
+	// Filters
+        add_filter('script_loader_src', array($this, 'refresh_browserCache'));
+        add_filter('style_loader_src', array($this, 'refresh_browserCache'));
     }
 
-    // Function to enqueue all the registered scripts and styles.
+    /**
+     * Function to enqueue all the registered scripts and styles.
+     * @param type $hook
+     * @return type
+     */
     public function enquerer($hook) {
 	// Checking the page name, if it is not user meta management page, then scripts and styles will not be enqueued
 	if( $hook !== unserialize(UMM_PAGE_NAME)) {
@@ -50,28 +61,37 @@ class UMMUserMetaManagement {
 	wp_enqueue_style(PLUGIN_PREFIX.'user-meta-style-css');
 	wp_enqueue_style ('wp-jquery-ui-dialog');
 
-	wp_register_script(PLUGIN_PREFIX.'user-meta-datatable-js', UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'));
-	wp_register_script(PLUGIN_PREFIX.'user-meta-script', UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'));
-	wp_register_script(PLUGIN_PREFIX.'user-meta-notify', UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'));
+	wp_register_script(PLUGIN_PREFIX.'user-meta-datatable-js', UMM_PLUGIN_URL . '/js/datatables-min.js', array('jquery'), '', true);
+	wp_register_script(PLUGIN_PREFIX.'user-meta-script', UMM_PLUGIN_URL . '/js/script.js', array('jquery','jquery-ui-core', 'jquery-ui-dialog'), '', true);
+	wp_register_script(PLUGIN_PREFIX.'user-meta-notify', UMM_PLUGIN_URL . '/js/notify.min.js', array('jquery'), '', true);
 	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-datatable-js');
 	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-script');
 	wp_enqueue_script(PLUGIN_PREFIX.'user-meta-notify');
 	wp_localize_script(PLUGIN_PREFIX.'user-meta-script', 'UMMData', array('ajaxurl' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('user-meta-management')));
     }
-    // Function to parse the template.
-    public function parseTemplate($file, $inputData) {
+    
+    /**
+     * Function to parse the template.
+     * @param type $file
+     * @param type $inputData
+     * @return type
+     */
+    private function parseTemplate($file, $inputData) {
 	ob_start();
 	include ($file);
 	return ob_get_clean();
     }
-
-    // Function to show the meta form.
+ 
+    /**
+     * Function to show the meta form.
+     * @return type
+     */
     public function showMetaForm() {
 	return ($this->parseTemplate(UMM_TEMPLATE . '/meta-form.php', null));
     }
 
-    /* Function to show the all users of specific metakey value equals.
-     *
+    /**
+     * Function to show the all users of specific metakey value equals.
      * 1) The function  accepts two parameters i.e. meta key and meta value.
      * 2) First the function get the current user details.
      * 3) If the current user is administrator then he has privilige to see the details.
@@ -83,8 +103,10 @@ class UMMUserMetaManagement {
      * 6) By grabbing the user id from the result we'll get the user details by using get_userdata and get_user_meta function of wordpress.
      * 7) From the user details we'll take the userId,firstname,lastname and email address of the user.
      * 8) The function generates the list based on the count of number of users who have the meta key value combination matched.
-     * 9) The result will be returned to the client side.
-     *
+     * 9) The result will be returned to the client side.     * 
+     * @param type $metakey
+     * @param type $metavalue
+     * @return type
      */
     public function showAllUsersOfSpecificMetaKey($metakey, $metavalue) {
 	$result = wp_get_current_user();
@@ -95,36 +117,34 @@ class UMMUserMetaManagement {
 		'meta_value' => $metavalue,
 		'meta_compare' => '=',
 	    ));
+	    $user = array();
 	    if (count($users)) {
-		$user = array();
+		
 		for ($j = 0; $j < count($users); $j++) {
-		    $id = (array) ($users[$j]->data);
-		    $userDetails = (array) get_userdata($id['ID']);
-		    $userMetaInformation = get_user_meta($id['ID']);
-		    $userDetailsEmail = (array) get_userdata($id['ID'])->data;
-		    $userRoles = implode(', ', get_userdata($id['ID'])->roles);
-		    $userId = $userDetails['ID'] == " " ? '--' : $userDetails['ID'];
-		    $userFirstName = ($userMetaInformation['first_name'][0] == '' ? '--' : $userMetaInformation['first_name'][0]);
-		    $userLastName = ($userMetaInformation['last_name'][0] == '' ? '--' : $userMetaInformation['last_name'][0]);
-		    $userEmail = ($userDetailsEmail['user_email'] == '' ? '--' : $userDetailsEmail['user_email']);
+		    $userInfo = (array) ($users[$j]->data);
+		    $userDetails = (array) get_userdata($userInfo['ID']);
+		    $userMetaInformation = get_user_meta($userInfo['ID']);
+		    $userDetailsEmail = (array) get_userdata($userInfo['ID'])->data;
+		    $userRoles = implode(', ', get_userdata($userInfo['ID'])->roles);
+		    $userId = $userDetails['ID'] == "" ? '' : $userDetails['ID'];
+		    $userFirstName = ($userMetaInformation['first_name'][0] == '' ? $this->defaultValue() : $userMetaInformation['first_name'][0]);
+		    $userLastName = ($userMetaInformation['last_name'][0] == '' ? $this->defaultValue() : $userMetaInformation['last_name'][0]);
+		    $userEmail = ($userDetailsEmail['user_email'] == '' ? $this->defaultValue() : $userDetailsEmail['user_email']);
 		    $userInformation = array('id' => $userId, 'firstName' => $userFirstName, 'lastName' => $userLastName, 'email' => $userEmail, 'role' => $userRoles);
 		    array_push($user, $userInformation);
 		}
-	    } else {
-		$user = null;
-	    } 
+	    }
 	    return ($this->parseTemplate(UMM_TEMPLATE . '/users-same-meta-information.php', $user));
 	} else {
 	    echo '<h2>You are not authorised to view this page.</h2>';
 	}
     }
 
-    /*
+    /**
      * Function to search the meta key and value combinations.
      * 1) From the client side the meta key and value  will be received through the ajax call.
      * 2) We'll pass the meta key and value to the UMMShowAllUsersOfSpecificMetaKey function which process the data passed and return the result.
      * 3) The result of users who have the same meta key and value matched is echoed.
-     *
      */
     public function metaSearch() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
@@ -136,13 +156,12 @@ class UMMUserMetaManagement {
 	}
     }
 
-    /*
+    /**
      * Function to get the user meta details.
      * 1) The function gets user Id from the client side through the ajax call;.
      * 2) The user is passed through the wordpress funtion get_user_meta which gives all the meta keys and values list.
      * 3) We'll keep track of the unwanted keys and the remaining will be displayed to the user.
-     *
-     */
+     */    
     public function getUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
@@ -153,7 +172,7 @@ class UMMUserMetaManagement {
 	    for ($i = 0; $i < count($metaListKeys); $i++) {
 		if (!in_array($metaListKeys[$i], $exemptedList)) {
 		    $key = $metaListKeys[$i];
-		    $value = ($metaList[$key][0] == '' ? '--' : $metaList[$key][0]);
+		    $value = ($metaList[$key][0] == '' ? '' : $metaList[$key][0]);
 		    $userMetaDetailsResults[$key] = $value;
 		}
 	    }
@@ -163,14 +182,13 @@ class UMMUserMetaManagement {
 	}
     }
 
-    /*  .
+    /**
      * 1) Receives the userId and meta information to be updated from the client side through ajax call..
      * 2) The meta information to be updated consists of array of meta keys and values.
      * 3) First the list of keys are passed into the variable.
      * 4) Then by passing the userid, meta key and meta value to the  update_user_meta function of wordpress
      *      the  meta information will be updated.
      * 5) The update_user_meta function also take care off adding the new meta information.
-     *
      */
     public function updateUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
@@ -182,21 +200,21 @@ class UMMUserMetaManagement {
 		$update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
 	    }
 	    if ($update) {
-		echo json_encode(array('success' => 'You have updated meta information successfully'));
+		echo json_encode(array('success' => SUCCESS_MESSAGE));
 	    } else {
-		echo json_encode(array('error' => 'There is nothing to update'));
+		echo json_encode(array('error' => ALERT_MESSAGE));
 	    }
 	    die();
 	}
     }
 
-    /* Function to delete the user meta information.
+    /** 
+     * Function to delete the user meta information.
      * 1) This function receives the userId and meta information  to be deleted from the client side through ajax call..
      * 2) The meta information to be deleted consists of array of meta keys and values.
      * 3) First the list of keys are passed into the variable.
      * 4) Then by passing the userid, meta key and meta value to the  delete_user_meta function of wordpress
      *     the  meta information will be deleted.
-     *
      */
     public function deleteUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
@@ -207,38 +225,78 @@ class UMMUserMetaManagement {
 	    for ($i = 0; $i < count($keys); $i++) {
 		$delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
 	    } if ($delete) {
-		echo json_encode(array('success' => 'You have deleted meta information successfully'));
+		echo json_encode(array('success' => SUCCESS_MESSAGE));
 	    } else {
-		echo json_encode(array('error' => 'There is nothing to delete'));
+		echo json_encode(array('error' => ALERT_MESSAGE));
 	    }
 	    die();
 	}
     }
 
-    // Function to create a user page in the user secion in the user seciton.
+    /**
+     * Function to create a user page in the user secion in the user seciton.
+     */
     public function addUserPage() {
 	add_users_page('User Meta Management', 'User Meta Management', 'manage_options', 'user-meta-management', array($this, 'userMetaDataManagement'));
     }
 
+    /**
+     * Function to echo user meta data form and other specific meta keys and values.
+     */
     public function userMetaDataManagement() {
 	echo($this->showMetaForm());
 	echo($this->showAllUsersOfSpecificMetaKey(null, null));
     }
-
-    // Fixing the nonce life time.
+ 
+    /**
+     * Fixing the nonce life time.
+     * @param type $time
+     * @return type
+     */
     public function nonceLifeTime($time) {
 	$nonceLifeTime = unserialize(UMM_NONCE_LIFE_TIME);
 	return $nonceLifeTime;
     }
 
-    // Adding the settings options to the user meta management plugin.
+    /**
+     * Adding the settings options to the user meta management plugin.
+     * @param type $links
+     * @return type
+     */
     public function addActionLink($links) {
 	$mylinks = array(
 	    '<a href="' . admin_url('users.php?page=user-meta-management') . '">Settings</a>',
 	);
 	return array_merge($links, $mylinks);
     }
-
+    
+    /**
+     * Function to return '--' for empty values.
+     * @return string
+     */
+    private function defaultValue() {
+	return EMPTY_VALUE;
+    }
+    
+    /**
+     *
+     * It is used to clear cache files when version is changed.
+     * @param type $src
+     * @return string
+     */
+    public function refresh_browserCache($src) {
+	$version_str = '?ver=' . VERSION;
+	// Put your regular expression here
+	if (preg_match('/plugins\/[1-9]+.[a-zA-Z]+/', $src) || preg_match('/[myurl]+\/[style]+.css/', $src)) {
+	    if (strpos($src, '?ver=')) {
+		$search = substr($src, strpos($src, '?ver='));
+		$src = str_replace($search, $version_str, $src);
+	    } else {
+		$src = $src . $version_str;
+	    }
+	}
+	return $src;
+    }
 }
 
 $meta = new UMMUserMetaManagement();

@@ -20,13 +20,34 @@
     cursor:pointer;
 }
 .btn-space{
-    margin-top:10px;
+    margin-top: 18px;
     text-align: center;
 }
 .dataTables_length, .paging_simple_numbers{
     display: inline-block;
     float: right;
-    margin-top: 15px !important;;
+}
+div.dataTables_paginate {
+    margin-top: 5px !important;
+    margin-right: 20px;
+}
+.umm-meta-results .umm-table {
+    padding-bottom: 20px;	   
+}
+#UMMUsersMeta.dataTable td.dataTables_empty {
+    text-align: center;    
+}
+.umm-meta-form .form-inline .form-group {
+    margin-right: 10px;
+}
+.umm-user-id {
+    cursor: pointer;
+}
+#UMMDialogForm {
+    height: 486px !important;
+}
+#UMMUserMetaInformation tbody tr td:first-child {
+    text-align: center;
 }
 .dataTables_length{
     margin-right:10px;
@@ -241,7 +262,7 @@ input[type="submit"], input[type="button"], button {
 }
 .dialog-form-header {
     padding-top: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 .umm-dialog-alert .dialog-form-header .ui-dialog-titlebar-close {
     padding-top: 9px;
@@ -278,10 +299,15 @@ input[type="submit"], input[type="button"], button {
     padding-right: 0;
     padding-left: 8px;
 }
-@media (max-width: 767px) {     
+.umm-btn-group {
+    text-align: right;
+    display: inline-block;
+}
+@media (max-width: 991px) {     
     .umm-meta-form input[type="submit"] {
 	display: block;
 	float: right;
+	margin-right: 10px;
     }
     .umm-meta-form .form-inline .form-group {
 	display: block;
@@ -291,10 +317,15 @@ input[type="submit"], input[type="button"], button {
 	float: right;
 	margin-bottom: 10px;
     }
-    .umm-meta-form .form-group, .umm-meta-form input[type="submit"] {
+    .umm-meta-form .form-group {
 	clear: both;
     }
     .umm-meta-results {
 	padding-top: 3em;
+    }
+    .umm-btn-group {
+	display: inline-block;
+        float: right;
+        clear: both;
     }
 }

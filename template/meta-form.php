@@ -8,17 +8,22 @@
             <label for="txtMetaValue">Meta value :</label>
             <input type="text" id="txtMetaValue" name="meta-value">
         </div>
-        <input type="submit" name="meta-search" value="Search" id="submitMeta" class="umm-btn umm-btn-primary">
+	<div class="umm-btn-group">
+	    <input type="submit" name="meta-search" value="Search" id="submitMeta" class="umm-btn umm-btn-primary">
+	    <input type="button" value="Reset" id="resetMeta" class="umm-btn umm-btn-warning">
+	</div>        
     </form>
 </div>
 <div class="meta-table-results"></div>
-<div id="UMMDialogForm" aria-labelledby="myModalLabel">
-    <div id="userMetaDetails">
-    </div>
-    <div class="umm-text-right">
-	<button type="button" id="updateUserMetaInformation"  class="umm-btn umm-btn-primary btn-space"  tabindex="-1">Update</button>
-	<button type="button" id="deleteUserMetaInformation" class="umm-btn umm-btn-primary btn-space"  tabindex="-1">Delete</button>
-    </div>
+<div id="UMMDialogForm">
+    <form>
+	<div id="userMetaDetails">
+	</div>
+	<div class="umm-text-right">
+	    <input type="submit" id="updateUserMetaInformation"  class="umm-btn umm-btn-primary btn-space"  value="Update" tabindex="-1">
+	    <input type="button" id="deleteUserMetaInformation" class="umm-btn umm-btn-danger btn-space" value="Delete" tabindex="-1">
+	</div>
+    </form>    
 </div>
 <div class="alert-dialog-boxes">
 <div id="modalSuccess" class="umm-dialog-alert dialog-success" style="display: none;">

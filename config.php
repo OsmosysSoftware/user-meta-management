@@ -19,3 +19,12 @@ define("UMM_PAGE_NAME", serialize('users_page_user-meta-management'));
 
 // Defining plugin prefix constant
 define("PLUGIN_PREFIX", 'UMM');
+
+// Defining success message
+define("SUCCESS_MESSAGE", 'You have updated meta information successfully');
+
+// Defining alert message
+define("ALERT_MESSAGE", 'There is nothing to delete');
+
+// Defining default empty value
+define("EMPTY_VALUE", '--');
