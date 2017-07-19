@@ -120,6 +120,7 @@
 	function designAlertDialogBoxes(currentDialog) {
 	    
 	    if(currentDialog.hasClass('dialog-success')) {
+		$('#updateUserMetaInformation').val('Update');
 		metaFormDialog.dialog("close");
 	    }
 	    var alertDialogs = ['dialog-info', 'dialog-warning', 'dialog-danger', 'dialog-success'];
@@ -266,7 +267,7 @@
 			}
 			cbFunction(result);
 		    } else {
-			location.reload();
+			location.reload();			
 		    }
 		},
 		error: function (xhr) {
@@ -282,8 +283,7 @@
 	    appendContent += '<td><input type="text" placeholder="Meta value..." </td></tr>';
 	    $('#UMMUserMetaInformation').append(appendContent);
 	    $('html, .dataTables_scrollBody').animate({scrollTop: $('#UMMUserMetaInformation tr:last').offset().top}, 500);
-	    $('#updateUserMetaInformation').html('Save');
-
+	    $('#updateUserMetaInformation').val('Save');
 	}
     });
     $(UMMUserMetaManager);
