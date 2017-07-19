@@ -226,7 +226,15 @@
 		    emptyTable: "There are no users with the specificied meta combination."
 		},
 		scrollX: true,
-		autoWidth: false
+		autoWidth: false,
+		order: [[0, "asc"]],
+	        columnDefs: [
+		    {"width": "7%", "targets": 0},
+		    {"width": "30%", "targets": 1},
+		    {"width": "25%", "targets": 2},
+		    {"width": "25%", "targets": 3},
+		    {"width": "13%", "targets": 4}
+	        ]
 	    });
 	}
 

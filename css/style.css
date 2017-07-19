@@ -301,6 +301,9 @@ input[type="submit"], input[type="button"], button {
     text-align: right;
     display: inline-block;
 }
+.umm-table#UMMUsersMeta {
+    padding-bottom: 20px;
+}
 @media (max-width: 991px) {     
     .umm-meta-form input[type="submit"] {
 	display: block;
