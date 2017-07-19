@@ -31,9 +31,6 @@ div.dataTables_paginate {
     margin-top: 5px !important;
     margin-right: 20px;
 }
-.umm-meta-results .umm-table {
-    padding-bottom: 20px;	   
-}
 #UMMUsersMeta.dataTable td.dataTables_empty {
     text-align: center;    
 }
@@ -287,7 +284,7 @@ input[type="submit"], input[type="button"], button {
     font-weight: bold;
 }
 .umm-meta-form .form-inline .form-group input {
-    height: 32px;
+    height: 34px;
 }
 .form-inline #submitMeta {
     vertical-align: top;
@@ -300,6 +297,7 @@ input[type="submit"], input[type="button"], button {
     padding-left: 8px;
 }
 .umm-btn-group {
+    vertical-align: top;
     text-align: right;
     display: inline-block;
 }
