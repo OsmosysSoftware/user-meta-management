@@ -1,6 +1,6 @@
-# user-meta-manager 
+# user-meta-management
 
-Contributors: Siddhartha-Osmosys
+Contributors: Siddhartha-Osmosys, manikanta-osm
 
 Tags: user, meta, management
 
@@ -10,9 +10,9 @@ Tested up to: 4.8
 
 Stable tag: 0.0.1
 
-License: MIT License
+License: GPLv2 or later
 
-License URI: http://osmosyssoftware.github.io/user-meta-manager/
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 ##### A WordPress plugin that allows you to view the meta keys associated with a given user.
@@ -43,6 +43,9 @@ Screenshot showing results of meta search.
 
 Screenshot showing adding of meta keys to the user.
 ![Meta adding](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/addusermeta.png)
+
+Screenshot showing update of meta keys to the user
+![Meta adding](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/updateusermeta.png)
 
 Screen showing the deleting of meta keys.
 ![Preventing deletion](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/preventdelete.png)
