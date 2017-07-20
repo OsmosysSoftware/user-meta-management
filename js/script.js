@@ -1,7 +1,7 @@
 (function ($) {
     var UMMUserMetaManager = (function () {
 	var metaInformation = [];
-	var userId;
+	var userId;	
 
 	$(".dialog-info, .dialog-warning, .dialog-danger, .dialog-success").dialog({
 	    autoOpen: false,
@@ -22,15 +22,17 @@
 	    width: 520,
 	    modal: true,
 	    buttons: {
-		Cancel: function () {
-		    metaFormDialog.dialog("close");
+		Cancel: function () {		    
 		}
 	    },
 	    open: function () {
 		if ($(this).parent().find('.ui-dialog-titlebar .dialog-form-heading').length === 0) {
 		    $(this).parent().find('.ui-dialog-titlebar').addClass('dialog-form-header').append('<span class="dialog-form-heading">User meta information</span><button type="button" id="UMMAddUserMetaInformation"   class="umm-btn umm-btn-primary text-right">Add Meta Key</button>');
 		}
-	    }
+	    },
+	    close: function () {
+		getMetaMatchLIst();
+	    }		    
 	});
 
 	$('#UMMUsersMeta').dataTable({
@@ -39,11 +41,11 @@
 	    scrollX: true,
 	    autoWidth: false,
 	    columnDefs: [
-		{"width": "20%", "targets": 0},
-		{"width": "10%", "targets": 1},
-		{"width": "20%", "targets": 2},
-		{"width": "15%", "targets": 3},
-		{"width": "10%", "targets": 4}
+		{"width": "7%", "targets": 0},
+		{"width": "30%", "targets": 1},
+		{"width": "25%", "targets": 2},
+		{"width": "25%", "targets": 3},
+		{"width": "13%", "targets": 4}
 	    ]
 	});
 
@@ -56,10 +58,17 @@
 	    }
 	});
 
-	$('body').on('click', '.user-mail', function (e) {
+	$('#resetMeta').click(function (e) {
+	    e.preventDefault();
+	    $("#userMetaForm")[0].reset();
+	    $('#txtMetaKey').removeClass('error');
+	    getMetaMatchLIst();	    
+	});
+	
+	$('body').on('click', '.umm-user-id', function (e) {
 	    e.preventDefault();
 	    $('.user-meta-results').html('');
-	    userId = +($($(this).parents('tr').find('#userId')).html());
+	    userId = +($($(this).parents('tr').find('.umm-user-id')).html());
 	    getUserMetaInformation();
 	    metaFormDialog.dialog('open');
 	});
@@ -68,18 +77,21 @@
 	    $('.user-meta-information').hide();
 	});
 
-	$('body').on('click', '#updateUserMetaInformation', function () {
+	$('body').on('click', '#updateUserMetaInformation', function (e) {
+	    e.preventDefault();
 	    var updateMetaInformation = [];
-	    var updatedMetaData = {};
+	    var updatedMetaData = {};	
+	    var userMetaInfoTableRow = $('#UMMUserMetaInformation tr');
+	    
 	    // Storing all keys and values of dialog form into the updateMetaInformation array
-	    for (var i = 1; i < $('#UMMUserMetaInformation tr').length; i++) {
-		var key = $($($('#UMMUserMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
-		var value = $($($('#UMMUserMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
+	    for (var i = 1; i < userMetaInfoTableRow.length; i++) {
+		var key = $($(userMetaInfoTableRow[i]).find('input[type="text"]')[0]).val();
+		var value = $($(userMetaInfoTableRow[i]).find('input[type="text"]')[1]).val();
 		updateMetaInformation[key] = value;
 	    }
 	    // Filtering newly added meta keys and values and storing in updatedMetaData array.
 	    for (var key in updateMetaInformation) {
-		if (metaInformation[key] !== updateMetaInformation[key]) {
+		if (metaInformation[key] !== updateMetaInformation[key].trim() && updateMetaInformation[key].trim() !== '') {
 		    updatedMetaData[key] = updateMetaInformation[key];
 		}
 	    }
@@ -106,6 +118,11 @@
 	 * @returns {undefined}
 	 */
 	function designAlertDialogBoxes(currentDialog) {
+	    
+	    if(currentDialog.hasClass('dialog-success')) {
+		$('#updateUserMetaInformation').val('Update');
+		metaFormDialog.dialog("close");
+	    }
 	    var alertDialogs = ['dialog-info', 'dialog-warning', 'dialog-danger', 'dialog-success'];
 	    var alertDialogTitleBars = ['ui-info-dialog-titlebar', 'ui-warning-dialog-titlebar', 'ui-danger-dialog-titlebar', 'ui-success-dialog-titlebar'];
 	    // Checking the type of alert dialog box and adding respective title bar, icon and class required
@@ -125,8 +142,6 @@
 	// Function to show the messages on to alert dialog boxes
 	function showMessage(data) {
 	    var json = JSON.parse(data);
-	    metaFormDialog.dialog('close');
-	    console.log(json.error);
 	    if (json['error']) {
 		var container = $('#UMMModalInfo').find('.dialog-body');
 		$(container).html(json['error']);
@@ -151,11 +166,12 @@
 	// Function to delete the User meta information from the meta list available..
 	function deleteUserMetaInformation() {
 	    var deleteMetaInformation = {};
-	    for (var i = 1; i < $('#UMMUserMetaInformation tr').length; i++) {
-		var check = $($($('#UMMUserMetaInformation tr')[i]).find('input:checked'));
+	    var userMetaInfoTableRow = $('#UMMUserMetaInformation tr');
+	    for (var i = 1; i < userMetaInfoTableRow.length; i++) {
+		var check = $($(userMetaInfoTableRow[i]).find('input:checked'));
 		if (check.length) {
-		    var key = $($($('#UMMUserMetaInformation tr')[i]).find('input')[1]).val();
-		    var value = $($($('#UMMUserMetaInformation tr')[i]).find('input')[2]).val();
+		    var key = $($(userMetaInfoTableRow[i]).find('input')[1]).val();
+		    var value = $($(userMetaInfoTableRow[i]).find('input')[2]).val();
 		    deleteMetaInformation[key] = value;
 		}
 	    }
@@ -169,10 +185,11 @@
 
 	}
 
-	// Function to shoe the user meta details.
+	// Function to show the user meta details.
 	function showMetaDetails(result) {
 	    metaInformation = [];
 	    $('#UMMUserMetaInformation').DataTable().destroy();
+	    $('#userMetaDetails').html('');
 	    $('#userMetaDetails').html(result);
 	    $('.user-meta-information').show();
 	    $('#UMMUserMetaInformation').dataTable({
@@ -188,9 +205,10 @@
 		bSort: false
 	    });
 
-	    for (var i = 1; i < $('#UMMUserMetaInformation tr').length; i++) {
-		var key = $($($('#UMMUserMetaInformation tr')[i]).find('input[type="text"]')[0]).val();
-		var value = $($($('#UMMUserMetaInformation tr')[i]).find('input[type="text"]')[1]).val();
+	    var userMetaInfoTableRow = $('#UMMUserMetaInformation tr');	    
+	    for (var i = 1; i < userMetaInfoTableRow.length; i++) {
+		var key = $($(userMetaInfoTableRow[i]).find('input[type="text"]')[0]).val();
+		var value = $($(userMetaInfoTableRow[i]).find('input[type="text"]')[1]).val();
 		metaInformation[key] = value;
 	    }
 	}
@@ -209,7 +227,15 @@
 		    emptyTable: "There are no users with the specificied meta combination."
 		},
 		scrollX: true,
-		autoWidth: false
+		autoWidth: false,
+		order: [[0, "asc"]],
+	        columnDefs: [
+		    {"width": "7%", "targets": 0},
+		    {"width": "30%", "targets": 1},
+		    {"width": "25%", "targets": 2},
+		    {"width": "25%", "targets": 3},
+		    {"width": "13%", "targets": 4}
+	        ]
 	    });
 	}
 
@@ -233,6 +259,7 @@
 		url: UMMData.ajaxurl,
 		type: "post",
 		data: data,
+		timeout: 10000, 
 		success: function (result) {
 		    if (result !== '-1') {
 			if (chidCbFunc) {
@@ -240,11 +267,10 @@
 			}
 			cbFunction(result);
 		    } else {
-			location.reload();
+			location.reload();			
 		    }
 		},
 		error: function (xhr) {
-		    console.log(xhr);
 		    $.notify('Unable to process your request', "error");
 		}
 	    });
@@ -257,8 +283,7 @@
 	    appendContent += '<td><input type="text" placeholder="Meta value..." </td></tr>';
 	    $('#UMMUserMetaInformation').append(appendContent);
 	    $('html, .dataTables_scrollBody').animate({scrollTop: $('#UMMUserMetaInformation tr:last').offset().top}, 500);
-	    $('#updateUserMetaInformation').html('Save');
-
+	    $('#updateUserMetaInformation').val('Save');
 	}
     });
     $(UMMUserMetaManager);

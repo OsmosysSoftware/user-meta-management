@@ -5,8 +5,8 @@ require_once( __DIR__ . '/../config.php');
     <table id="UMMUsersMeta" class="umm-table table-striped">
         <thead>
             <tr>
-		<th>Email<i class="fa fa-fw fa-sort"></i></th>
                 <th>ID<i class="fa fa-fw fa-sort"></i></th>
+		<th>Email<i class="fa fa-fw fa-sort"></i></th>
                 <th>First name<i class="fa fa-fw fa-sort"></i></th>
                 <th>Last name<i class="fa fa-fw fa-sort"></i></th>                
                 <th>Role<i class="fa fa-fw fa-sort"></i></th>
@@ -17,9 +17,9 @@ require_once( __DIR__ . '/../config.php');
             if (count($inputData)) {
                 for ($i = 0; $i < count($inputData); $i++) {
                     ?>
-                    <tr>
-			<td><a class="user-mail"><?php echo $inputData[$i]['email']; ?></a></td>
-                        <td id="userId"><?php echo $inputData[$i]['id']; ?></td>
+                    <tr>			
+                        <td id="userId"><a title="Click to view the user meta data dialog box" class="umm-user-id"><?php echo $inputData[$i]['id']; ?></a></td>
+			<td><a class="user-mail" href="mailto:<?= $inputData[$i]['email']?>"><?php echo $inputData[$i]['email']; ?></a></td>
                         <td><?php echo $inputData[$i]['firstName']; ?></td>
                         <td><?php echo $inputData[$i]['lastName']; ?></td>                        
                         <td><?php echo ucfirst($inputData[$i]['role']); ?></td>
