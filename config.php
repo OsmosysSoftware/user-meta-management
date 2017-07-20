@@ -23,8 +23,11 @@ define("PLUGIN_PREFIX", 'UMM');
 // Defining success message
 define("SUCCESS_MESSAGE", 'You have updated meta information successfully');
 
-// Defining alert message
-define("ALERT_MESSAGE", 'There is nothing to delete');
+// Defining alert update message
+define("ALERT_UPDATE", 'There is nothing to update');
+
+// Defining alert delete message
+define("ALERT_DELETE", 'There is nothing to delete');
 
 // Defining default empty value
 define("EMPTY_VALUE", '--');
