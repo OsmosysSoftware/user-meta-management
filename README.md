@@ -49,6 +49,3 @@ Screenshot showing update of meta keys to the user
 
 Screen showing the deleting of meta keys.
 ![Preventing deletion](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/preventdelete.png)
-
-Displaying the error messages to the user.
-![Error ](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/error-handling.png)
