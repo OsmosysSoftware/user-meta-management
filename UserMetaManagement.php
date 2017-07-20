@@ -202,7 +202,7 @@ class UMMUserMetaManagement {
 	    if ($update) {
 		echo json_encode(array('success' => SUCCESS_MESSAGE));
 	    } else {
-		echo json_encode(array('error' => ALERT_MESSAGE));
+		echo json_encode(array('error' => ALERT_UPDATE));
 	    }
 	    die();
 	}
@@ -227,7 +227,7 @@ class UMMUserMetaManagement {
 	    } if ($delete) {
 		echo json_encode(array('success' => SUCCESS_MESSAGE));
 	    } else {
-		echo json_encode(array('error' => ALERT_MESSAGE));
+		echo json_encode(array('error' => ALERT_DELETE));
 	    }
 	    die();
 	}
