@@ -18,16 +18,16 @@ define("UMM_NONCE_LIFE_TIME", serialize('14400'));
 define("UMM_PAGE_NAME", serialize('users_page_user-meta-management'));
 
 // Defining plugin prefix constant
-define("PLUGIN_PREFIX", 'UMM');
+define("UMM_PLUGIN_PREFIX", 'UMM');
 
 // Defining success message
-define("SUCCESS_MESSAGE", 'You have updated meta information successfully');
+define("UMM_SUCCESS_MESSAGE", 'You have updated meta information successfully');
 
 // Defining alert update message
-define("ALERT_UPDATE", 'There is nothing to update');
+define("UMM_ALERT_UPDATE", 'There is nothing to update');
 
 // Defining alert delete message
-define("ALERT_DELETE", 'There is nothing to delete');
+define("UMM_ALERT_DELETE", 'There is nothing to delete');
 
 // Defining default empty value
-define("EMPTY_VALUE", '--');
+define("UMM_EMPTY_VALUE", '--');
