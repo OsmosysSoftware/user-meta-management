@@ -96,7 +96,7 @@
 		}
 	    }
 	    var data = {
-		action: 'update_user_meta_data',
+		action: 'UMM_update_user_meta_data',
 		security: UMMData.ajax_nonce,
 		userId: userId,
 		UMMData: updatedMetaData
@@ -156,7 +156,7 @@
 	// Function to get the user meta information.
 	function  getUserMetaInformation() {
 	    var data = {
-		action: "get_user_meta_details",
+		action: "UMM_get_user_meta_details",
 		security: UMMData.ajax_nonce,
 		userId: userId
 	    };
@@ -176,7 +176,7 @@
 		}
 	    }
 	    var data = {
-		action: 'delete_user_meta',
+		action: 'UMM_delete_user_meta',
 		security: UMMData.ajax_nonce,
 		userId: userId,
 		UMMData: deleteMetaInformation
@@ -245,7 +245,7 @@
 	    var metakey = $('#txtMetaKey').val();
 	    var metaValue = $('#txtMetaValue').val();
 	    var data = {
-		action: 'meta_search',
+		action: 'UMM_meta_search',
 		security: UMMData.ajax_nonce,
 		metaKey: metakey,
 		metaValue: metaValue
