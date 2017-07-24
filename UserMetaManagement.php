@@ -17,7 +17,7 @@ require_once( __DIR__ . '/config.php');
 class UMMUserMetaManagement {
 
     public function __construct() {	
-	add_action('admin_enqueue_scripts', array($this, 'enquerer'));
+	add_action('admin_enqueue_scripts', array($this, 'UMM_enquerer'));
 	// Shortcode to view the form.
 	add_shortcode('show_meta_form', array($this, 'showMetaForm'));
 	// Shortcode to show the users of specific meta key combinations.
@@ -46,7 +46,7 @@ class UMMUserMetaManagement {
      * @param type $hook
      * @return type
      */
-    public function enquerer($hook) {
+    public function UMM_enquerer($hook) {
 	// Checking the page name, if it is not user meta management page, then scripts and styles will not be enqueued
 	if( $hook !== unserialize(UMM_PAGE_NAME)) {
 	    return;
