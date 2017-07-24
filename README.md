@@ -41,6 +41,9 @@ Starting screen of the user meta manager
 Screenshot showing results of meta search.
 ![Meta search](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/metasearch.png)
 
+Screenshot for opening user meta information dialog box
+![Meta search](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/open-dialog.png)
+
 Screenshot showing adding of meta keys to the user.
 ![Meta adding](https://raw.githubusercontent.com/OsmosysSoftware/user-meta-manager/gh-pages/img/addusermeta.png)
 
