@@ -193,7 +193,7 @@ class UMMUserMetaManagement {
     public function updateUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
-	    $meta = $_POST['UMMData'];
+	    $meta = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($meta);
 	    for ($i = 0; $i < count($keys); $i++) {
@@ -219,7 +219,7 @@ class UMMUserMetaManagement {
     public function deleteUserMetaDetails() {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
-	    $metaData = $_POST['UMMData'];
+	    $metaData = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 	    $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($metaData);
 	    for ($i = 0; $i < count($keys); $i++) {
