@@ -194,6 +194,13 @@ class UMMUserMetaManagement {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $meta = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+              
+              // Send error response if meta data is not there.
+              if(!$meta){
+                  echo json_encode(['error' => UMM_ALERT_UPDATE]);
+                  die();
+              }
+                           
 	    $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($meta);
 	    for ($i = 0; $i < count($keys); $i++) {
@@ -220,6 +227,13 @@ class UMMUserMetaManagement {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $metaData = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+               
+               // Send error response if meta data is not there.
+               if(!$metaData){
+                  echo json_encode(['error' => UMM_ALERT_DELETE]);
+                  die();
+              }
+            
 	    $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($metaData);
 	    for ($i = 0; $i < count($keys); $i++) {
