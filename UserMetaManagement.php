@@ -194,7 +194,14 @@ class UMMUserMetaManagement {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $meta = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-	    $userId = filter_input(INPUT_POST, 'userId');
+              
+              // Send error response if meta data is not set.
+            if (!$meta) {
+                echo json_encode(['error' => UMM_ALERT_UPDATE]);
+                die();
+            }
+
+            $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($meta);
 	    for ($i = 0; $i < count($keys); $i++) {
 		$update = update_user_meta($userId, $keys[$i], $meta[$keys[$i]]);
@@ -220,7 +227,14 @@ class UMMUserMetaManagement {
 	check_ajax_referer('user-meta-management', 'security', TRUE);
 	if (current_user_can('manage_options')) {
 	    $metaData = filter_input(INPUT_POST, 'UMMData', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-	    $userId = filter_input(INPUT_POST, 'userId');
+               
+               // Send error response if meta data is not set.
+            if (!$metaData) {
+                echo json_encode(['error' => UMM_ALERT_DELETE]);
+                die();
+            }
+
+            $userId = filter_input(INPUT_POST, 'userId');
 	    $keys = array_keys($metaData);
 	    for ($i = 0; $i < count($keys); $i++) {
 		$delete = delete_user_meta($userId, $keys[$i], $metaData[$keys[$i]]);
